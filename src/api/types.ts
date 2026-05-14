@@ -428,22 +428,31 @@ export const MensajeMetadataSchema = z
   })
   .passthrough();
 
-export const MensajeResponseRawSchema = z
-  .object({
-    mensaje_id: z.string(),
-    respuesta: z.string(),
-    artefactos: z.array(z.unknown()).default([]),
-    metadata: MensajeMetadataSchema.optional(),
-    blocked: z.boolean().default(false),
-    error: z.string().nullable().optional(),
-  })
-  .passthrough();
+// No usamos .passthrough() acá: causaba que Omit perdiera la narrowing
+// de los campos conocidos. Si el central agrega campos nuevos,
+// safeParse los descarta (no es un problema porque son metadata
+// y no afectan rendering).
+export const MensajeResponseRawSchema = z.object({
+  mensaje_id: z.string(),
+  respuesta: z.string(),
+  artefactos: z.array(z.unknown()).default([]),
+  metadata: MensajeMetadataSchema.optional(),
+  blocked: z.boolean().default(false),
+  error: z.string().nullable().optional(),
+});
 
 export type MensajeResponseRaw = z.infer<typeof MensajeResponseRawSchema>;
 
-export type MensajeResponse = Omit<MensajeResponseRaw, 'artefactos'> & {
+export type MensajeResponse = {
+  mensaje_id: string;
+  respuesta: string;
   artefactos: Artefacto[];
+  metadata?: MensajeMetadata;
+  blocked: boolean;
+  error?: string | null;
 };
+
+export type MensajeMetadata = z.infer<typeof MensajeMetadataSchema>;
 
 export function normalizeMensajeResponse(raw: MensajeResponseRaw): MensajeResponse {
   return {
