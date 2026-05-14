@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import type { z } from 'zod';
 import type { AccionPropuestaSchema } from '@/api/types';
 import { api } from '@/api/client';
+import { auditEvent } from '@/api/audit';
 
 type Accion = z.infer<typeof AccionPropuestaSchema>;
 
@@ -33,12 +34,23 @@ export default function AccionPropuestaCard({ artefacto, conversacionId }: Props
 
   const mutation = useMutation({
     mutationFn: async () => {
-      return api.post<unknown>('/accion', {
+      const result = await api.post<unknown>('/accion', {
         id_propuesta: artefacto.id_propuesta,
         conversation_id: conversacionId,
         parametros_finales: params,
         confirmado_en: new Date().toISOString(),
       });
+      // Audit best-effort, no bloquea el flow.
+      void auditEvent({
+        evento: 'accion_confirmada',
+        recurso: artefacto.id_propuesta,
+        metadata: {
+          tipo_accion: artefacto.tipo_accion,
+          riesgo: artefacto.riesgo,
+          conversation_id: conversacionId,
+        },
+      });
+      return result;
     },
     onSuccess: () => {
       setState('enviada');
