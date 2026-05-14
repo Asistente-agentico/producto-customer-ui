@@ -1,0 +1,8 @@
+dist
+node_modules
+coverage
+.vite
+docs/spec.md
+docs/plan.md
+*.lock
+package-lock.json

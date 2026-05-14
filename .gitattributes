@@ -1,0 +1,15 @@
+* text=auto eol=lf
+
+# Shell scripts y archivos de nginx siempre LF (corren en Linux/Alpine).
+*.sh text eol=lf
+docker/entrypoint.sh text eol=lf
+docker/nginx.conf text eol=lf
+
+# Binarios — sin conversión.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.woff binary
+*.woff2 binary

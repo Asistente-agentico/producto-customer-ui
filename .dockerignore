@@ -1,0 +1,16 @@
+node_modules
+dist
+.git
+.github
+.vscode
+.idea
+coverage
+.vite
+*.log
+.env
+.env.local
+.DS_Store
+Thumbs.db
+docs/spec.md
+docs/plan.md
+README.md
