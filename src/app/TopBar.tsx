@@ -30,7 +30,7 @@ export default function TopBar({ onToggleSidebar, hideMenuButton }: Props) {
           <button
             type="button"
             onClick={onToggleSidebar}
-            className="md:hidden -ml-2 p-2 rounded hover:bg-white/10"
+            className="md:hidden -ml-1 min-w-[44px] min-h-[44px] grid place-items-center rounded hover:bg-white/10"
             aria-label={t('nav.menu')}
           >
             <IconMenu2 size={20} aria-hidden="true" />
@@ -61,7 +61,7 @@ export default function TopBar({ onToggleSidebar, hideMenuButton }: Props) {
         <button
           type="button"
           onClick={() => void signOut()}
-          className="p-2 rounded hover:bg-white/10"
+          className="min-w-[44px] min-h-[44px] grid place-items-center rounded hover:bg-white/10"
           aria-label={t('nav.cerrar_sesion')}
           title={t('nav.cerrar_sesion')}
         >
@@ -84,7 +84,7 @@ function LangSwitcher({ current }: { current: string }) {
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 px-2 py-1 rounded hover:bg-white/10 text-xs uppercase"
+        className="flex items-center gap-1 px-3 min-h-[44px] rounded hover:bg-white/10 text-xs uppercase"
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={t('nav.configuracion')}

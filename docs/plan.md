@@ -472,10 +472,49 @@ Una feature se considera completa cuando:
 - [x] Repo `Asistente-agentico/producto-customer-ui` creado en GitHub.
 - [x] `docs/spec.md` versionado.
 - [x] `docs/plan.md` redactado (este documento).
-- [ ] **Plan revisado y aprobado** (esperando feedback).
-- [ ] Ambigüedades A1–A10 resueltas.
-- [ ] Fase 0 iniciada.
+- [x] **Plan aprobado y H0–H12 implementados.**
+- [x] Ambigüedades A1–A10 resueltas con las recomendaciones del plan
+      (ver sección 6); sujetas a revisión cuando el central V2 esté
+      disponible.
+
+### Hitos completados
+
+| # | Hito | Commit |
+|---|------|--------|
+| H0 | Bootstrap Docker + Vite + TS | `feat(fase-0): bootstrap` |
+| H1 | Cliente HTTP + tipos Zod + i18n + MSW + observability | `feat(fase-1)` |
+| H2 | Auth + capabilities + layout + routing + modo degradado | `feat(fase-2)` |
+| H3 | Chat funcional + 11 artefactos con dispatcher exhaustivo | `feat(fase-3)` |
+| H4 | Conversaciones persistidas en sidebar | `feat(fase-4)` |
+| H5 | KPIs SSE en vivo con throttle aria-live | `feat(fase-5)` |
+| H6 | Audit event en acciones | parte de `feat(fases-6/7/8)` |
+| H7 | Reportes (catálogo + descargas) | parte de `feat(fases-6/7/8)` |
+| H8 | Preferencias + idioma server-side | parte de `feat(fases-6/7/8)` |
+| H9 | Touch targets ≥44px, sidebar mobile, scroll containers | `feat(fases-9-12)` |
+| H10 | A11y con axe-core, helper de contraste WCAG | `feat(fases-9-12)` |
+| H11 | Trivy en CI + bundle splitting | `feat(fases-9-12)` |
+| H12 | README operativo + manualChunks + CSP estricta | `feat(fases-9-12)` |
+
+### Métricas del build final
+
+- **Bundle inicial gzipped**: ~150 KB sumando entry + react + router +
+  tanstack + i18n + zod (presupuesto del spec: 250 KB).
+- **OTel** (39 KB gzipped) y **Sentry** (25 KB gzipped) en chunks
+  separados que solo se cargan si los endpoints están configurados.
+- **Recharts** (107 KB gzipped) solo se carga cuando llega un
+  artefacto `serie_temporal`.
+- **48 tests** pasando entre unitarios, store, dispatcher, axe y
+  contraste.
+- **Imagen Docker** ~20 MB con healthcheck, CSP, security headers,
+  Trivy clean en CI.
+
+### Pendiente fuera del alcance de la UI
+
+- Central V2 que implemente el contrato HTTP del spec — esta UI espera
+  ese sprint para hacer el switch `USE_MOCKS=false` (ver R1).
+- Playwright e2e completo: la infraestructura de CI ya soporta agregar
+  jobs futuros sin tocar el código de la UI.
 
 ---
 
-**Pendiente de aprobación antes de iniciar Fase 0.**
+**Implementación H0–H12 completa. Lista para integración con central V2.**

@@ -84,3 +84,13 @@ jobs:
           curl -fsS http://localhost:8080/config.js | head -5
           docker logs ci-ui
           docker rm -f ci-ui
+
+      - name: Trivy vulnerability scan
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: producto-customer-ui:ci
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'

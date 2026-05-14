@@ -52,7 +52,7 @@ export default function Sidebar({ open, onClose }: Props) {
             type="button"
             onClick={onClose}
             aria-label={t('nav.cerrar')}
-            className="p-2 rounded hover:bg-white/10"
+            className="min-w-[44px] min-h-[44px] grid place-items-center rounded hover:bg-white/10"
           >
             <IconX size={18} aria-hidden="true" />
           </button>
@@ -125,7 +125,7 @@ function NavItem({ to, icon, label }: { to: string; icon: React.ReactNode; label
         end
         className={({ isActive }) =>
           [
-            'flex items-center gap-2 px-2 py-2 rounded text-sm hover:bg-white/10',
+            'flex items-center gap-2 px-2 py-2 min-h-[44px] rounded text-sm hover:bg-white/10',
             isActive ? 'bg-white/10 font-medium' : '',
           ].join(' ')
         }

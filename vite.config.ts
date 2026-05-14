@@ -22,6 +22,22 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
       sourcemap: true,
       target: 'es2022',
+      chunkSizeWarningLimit: 700,
+      rollupOptions: {
+        output: {
+          manualChunks(id) {
+            if (!id.includes('node_modules')) return undefined;
+            if (id.includes('react-router')) return 'router';
+            if (id.includes('@tanstack')) return 'tanstack';
+            if (id.includes('@sentry')) return 'sentry';
+            if (id.includes('@opentelemetry')) return 'otel';
+            if (id.includes('i18next') || id.includes('react-i18next')) return 'i18n';
+            if (id.includes('zod')) return 'zod';
+            if (id.includes('react-dom') || id.includes('scheduler')) return 'react';
+            return undefined;
+          },
+        },
+      },
     },
     test: {
       globals: true,
