@@ -1,8 +1,10 @@
 import { api } from './client';
 import {
+  ConversacionDetalleSchema,
   ConversacionListResponseSchema,
   MensajeResponseRawSchema,
   normalizeMensajeResponse,
+  type ConversacionDetalle,
   type ConversacionListResponse,
   type MensajeRequest,
   type MensajeResponse,
@@ -23,6 +25,11 @@ export async function crearConversacion(args: {
 
 export async function eliminarConversacion(id: string): Promise<void> {
   await api.delete<void>(`/conversaciones/${encodeURIComponent(id)}`);
+}
+
+export async function obtenerConversacion(id: string): Promise<ConversacionDetalle> {
+  const raw = await api.get<unknown>(`/conversaciones/${encodeURIComponent(id)}`);
+  return ConversacionDetalleSchema.parse(raw);
 }
 
 export async function enviarMensaje(

@@ -492,6 +492,43 @@ export const ConversacionListResponseSchema = z
 
 export type ConversacionListResponse = z.infer<typeof ConversacionListResponseSchema>;
 
+// Mensajes ya emitidos en una conversación (al cargar historial).
+// El central distingue mensajes del usuario y del asistente; cada uno
+// tiene su shape:
+//   - usuario: { rol: 'user', texto, ts }
+//   - asistente: response completo del LLM
+export const MensajeHistorialSchema = z.union([
+  z
+    .object({
+      rol: z.literal('user'),
+      texto: z.string(),
+      ts: z.string(),
+    })
+    .passthrough(),
+  z
+    .object({
+      rol: z.literal('assistant'),
+      ts: z.string(),
+      respuesta: MensajeResponseRawSchema,
+    })
+    .passthrough(),
+]);
+
+export type MensajeHistorialRaw = z.infer<typeof MensajeHistorialSchema>;
+
+export const ConversacionDetalleSchema = z
+  .object({
+    id: z.string(),
+    titulo: z.string(),
+    asistente_id: z.string().optional(),
+    creado_en: z.string(),
+    actualizado_en: z.string().optional(),
+    mensajes: z.array(MensajeHistorialSchema).default([]),
+  })
+  .passthrough();
+
+export type ConversacionDetalle = z.infer<typeof ConversacionDetalleSchema>;
+
 // ---------------------------------------------------------------------------
 // Preferencias (sección 4.4)
 // ---------------------------------------------------------------------------

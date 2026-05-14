@@ -1,17 +1,30 @@
 import { useEffect, useRef } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useChat } from './useChat';
 import MessageBubble from './MessageBubble';
 import ChatInput from './ChatInput';
 import Sugerencias from './Sugerencias';
 import { useCapabilities } from '@/stores/capabilities';
+import { useConversacionesStore } from '@/stores/conversaciones';
 
 export default function ChatPage() {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const { conversacionId } = useParams();
   const caps = useCapabilities((s) => s.capabilities);
-  const { mensajes, sendMessage, isPending, lastError } = useChat({ conversacionId });
+  const lastConversacionId = useConversacionesStore((s) => s.lastConversacionId);
+
+  // Si no hay conv en la URL pero sí hay una guardada, retomamos.
+  useEffect(() => {
+    if (!conversacionId && lastConversacionId) {
+      navigate(`/chat/${lastConversacionId}`, { replace: true });
+    }
+  }, [conversacionId, lastConversacionId, navigate]);
+
+  const { mensajes, sendMessage, isPending, isHistorialLoading, lastError } = useChat({
+    conversacionId,
+  });
 
   const liveRef = useRef<HTMLDivElement>(null);
   // Scroll al final cuando hay nuevos mensajes (preservando aria-live).
@@ -26,7 +39,7 @@ export default function ChatPage() {
         {caps?.ui.subtitulo ? <p className="text-sm opacity-70">{caps.ui.subtitulo}</p> : null}
       </header>
 
-      {mensajes.length === 0 ? <Sugerencias onPick={sendMessage} /> : null}
+      {mensajes.length === 0 && !isHistorialLoading ? <Sugerencias onPick={sendMessage} /> : null}
 
       <div
         ref={liveRef}
@@ -35,6 +48,11 @@ export default function ChatPage() {
         aria-live="polite"
         aria-label={t('nav.chat')}
       >
+        {isHistorialLoading ? (
+          <div className="text-xs opacity-70 px-1" role="status" aria-live="polite">
+            {t('comun.cargando')}
+          </div>
+        ) : null}
         {mensajes.map((m, i) => (
           <MessageBubble key={`${m.ts}-${i}`} message={m} conversacionId={conversacionId} />
         ))}

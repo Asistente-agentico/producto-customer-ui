@@ -1,6 +1,6 @@
 import { http, HttpResponse } from 'msw';
 import { appConfig } from '@/lib/config';
-import type { ConversacionListItem } from '@/api/types';
+import type { ConversacionListItem, MensajeHistorialRaw } from '@/api/types';
 import { pickMensajeMock } from '../fixtures/mensajes';
 
 const base = appConfig.BACKEND_URL_CENTRAL;
@@ -18,6 +18,29 @@ const conversaciones = new Map<string, ConversacionListItem>([
     },
   ],
 ]);
+const mensajesPorConv = new Map<string, MensajeHistorialRaw[]>([
+  [
+    'conv_demo_001',
+    [
+      {
+        rol: 'user',
+        texto: 'Mortalidad última semana en CTR-001',
+        ts: '2026-05-13T09:00:30Z',
+      },
+      {
+        rol: 'assistant',
+        ts: '2026-05-13T09:00:35Z',
+        respuesta: pickMensajeMock('mortalidad'),
+      },
+    ],
+  ],
+]);
+
+function appendMensaje(convId: string, mensaje: MensajeHistorialRaw) {
+  const list = mensajesPorConv.get(convId) ?? [];
+  list.push(mensaje);
+  mensajesPorConv.set(convId, list);
+}
 
 export const conversacionesHandlers = [
   http.get(`${base}/conversaciones`, () => {
@@ -26,6 +49,20 @@ export const conversacionesHandlers = [
         (b.actualizado_en ?? b.creado_en).localeCompare(a.actualizado_en ?? a.creado_en),
       ),
       next_cursor: null,
+    });
+  }),
+
+  http.get(`${base}/conversaciones/:id`, ({ params }) => {
+    const conv = conversaciones.get(String(params.id));
+    if (!conv) {
+      return HttpResponse.json(
+        { error: { code: 'NOT_FOUND', message: 'Conversación no encontrada.' } },
+        { status: 404 },
+      );
+    }
+    return HttpResponse.json({
+      ...conv,
+      mensajes: mensajesPorConv.get(conv.id) ?? [],
     });
   }),
 
@@ -43,24 +80,29 @@ export const conversacionesHandlers = [
       actualizado_en: new Date().toISOString(),
     };
     conversaciones.set(id, item);
+    mensajesPorConv.set(id, []);
     return HttpResponse.json({ id, titulo: item.titulo });
   }),
 
   http.delete(`${base}/conversaciones/:id`, ({ params }) => {
-    conversaciones.delete(String(params.id));
+    const id = String(params.id);
+    conversaciones.delete(id);
+    mensajesPorConv.delete(id);
     return new HttpResponse(null, { status: 204 });
   }),
 
   http.post(`${base}/conversaciones/:id/mensajes`, async ({ request, params }) => {
     const body = (await request.json().catch(() => null)) as { texto?: string } | null;
     const text = body?.texto ?? '';
+    const convId = String(params.id);
     const mock = pickMensajeMock(text);
-    // Update timestamp.
-    const conv = conversaciones.get(String(params.id));
+    const conv = conversaciones.get(convId);
     if (conv) {
       conversaciones.set(conv.id, { ...conv, actualizado_en: new Date().toISOString() });
     }
-    // Simular latencia leve.
+    const now = new Date().toISOString();
+    appendMensaje(convId, { rol: 'user', texto: text, ts: now });
+    appendMensaje(convId, { rol: 'assistant', ts: now, respuesta: mock });
     await new Promise((r) => setTimeout(r, 250));
     return HttpResponse.json(mock);
   }),
