@@ -1,0 +1,70 @@
+{
+  "app": {
+    "titulo": "Virtual Assistants",
+    "subtitulo": "Integrated productive management system"
+  },
+  "nav": {
+    "chat": "Chat",
+    "dashboard": "Dashboard",
+    "reportes": "Reports",
+    "configuracion": "Settings",
+    "perfil": "Profile",
+    "cerrar_sesion": "Sign out",
+    "menu": "Open menu",
+    "cerrar": "Close"
+  },
+  "auth": {
+    "iniciar_sesion": "Sign in",
+    "usuario": "Username",
+    "password": "Password",
+    "recordar": "Remember me on this device",
+    "sesion_expirada": "Your session expired. Please sign in again.",
+    "verificando": "Verifying session..."
+  },
+  "chat": {
+    "input_placeholder": "Type your question...",
+    "enviar": "Send",
+    "pensando": "Thinking...",
+    "respuesta_vacia": "No response.",
+    "sugerencias": "Suggestions",
+    "nueva_conversacion": "New conversation",
+    "asistente": "Assistant",
+    "tu": "You",
+    "ver_fuentes": "View sources",
+    "ocultar_fuentes": "Hide sources",
+    "fuentes_resumen": "{{count}} chunks · {{scopes}}",
+    "tipo_artefacto_desconocido": "Unknown artifact type"
+  },
+  "acciones": {
+    "confirmar": "Confirm",
+    "descartar": "Discard",
+    "editar": "Edit",
+    "riesgo_bajo": "Low risk",
+    "riesgo_medio": "Medium risk",
+    "riesgo_alto": "High risk",
+    "doble_confirmacion": "To confirm, type: {{frase}}"
+  },
+  "errores": {
+    "generico": "Something went wrong. Please try again.",
+    "red": "No connection to the server.",
+    "rbac": "You don't have permission to perform this operation.",
+    "validacion": "Some data is invalid.",
+    "bloqueado_llm": "The query was blocked by security policies.",
+    "upgrade_required": "This client version is no longer compatible. Please refresh.",
+    "mantenimiento": "The service is under maintenance. Please come back later.",
+    "capabilities_no_disponibles": "System configuration is unavailable. Limited functionality."
+  },
+  "version": {
+    "nueva_disponible": "A new version is available. Refresh the page to update.",
+    "refrescar": "Refresh"
+  },
+  "comun": {
+    "cargando": "Loading...",
+    "guardar": "Save",
+    "cancelar": "Cancel",
+    "aceptar": "OK",
+    "descargar": "Download",
+    "volver": "Back",
+    "reintentar": "Retry"
+  }
+}

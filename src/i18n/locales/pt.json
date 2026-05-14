@@ -1,0 +1,70 @@
+{
+  "app": {
+    "titulo": "Assistentes Virtuais",
+    "subtitulo": "Sistema integrado de gestão produtiva"
+  },
+  "nav": {
+    "chat": "Chat",
+    "dashboard": "Painel",
+    "reportes": "Relatórios",
+    "configuracion": "Configurações",
+    "perfil": "Perfil",
+    "cerrar_sesion": "Sair",
+    "menu": "Abrir menu",
+    "cerrar": "Fechar"
+  },
+  "auth": {
+    "iniciar_sesion": "Entrar",
+    "usuario": "Usuário",
+    "password": "Senha",
+    "recordar": "Lembrar-me neste dispositivo",
+    "sesion_expirada": "Sua sessão expirou. Entre novamente.",
+    "verificando": "Verificando sessão..."
+  },
+  "chat": {
+    "input_placeholder": "Digite sua consulta...",
+    "enviar": "Enviar",
+    "pensando": "Pensando...",
+    "respuesta_vacia": "Sem resposta.",
+    "sugerencias": "Sugestões",
+    "nueva_conversacion": "Nova conversa",
+    "asistente": "Assistente",
+    "tu": "Você",
+    "ver_fuentes": "Ver fontes",
+    "ocultar_fuentes": "Ocultar fontes",
+    "fuentes_resumen": "{{count}} chunks · {{scopes}}",
+    "tipo_artefacto_desconocido": "Tipo de artefato não reconhecido"
+  },
+  "acciones": {
+    "confirmar": "Confirmar",
+    "descartar": "Descartar",
+    "editar": "Editar",
+    "riesgo_bajo": "Risco baixo",
+    "riesgo_medio": "Risco médio",
+    "riesgo_alto": "Risco alto",
+    "doble_confirmacion": "Para confirmar, digite: {{frase}}"
+  },
+  "errores": {
+    "generico": "Algo deu errado. Tente novamente.",
+    "red": "Sem conexão com o servidor.",
+    "rbac": "Você não tem permissão para esta operação.",
+    "validacion": "Alguns dados não são válidos.",
+    "bloqueado_llm": "A consulta foi bloqueada por políticas de segurança.",
+    "upgrade_required": "Esta versão do cliente não é mais compatível. Atualize a página.",
+    "mantenimiento": "O serviço está em manutenção. Volte em breve.",
+    "capabilities_no_disponibles": "A configuração do sistema não está disponível. Funcionalidade limitada."
+  },
+  "version": {
+    "nueva_disponible": "Uma nova versão está disponível. Atualize a página.",
+    "refrescar": "Atualizar"
+  },
+  "comun": {
+    "cargando": "Carregando...",
+    "guardar": "Salvar",
+    "cancelar": "Cancelar",
+    "aceptar": "OK",
+    "descargar": "Baixar",
+    "volver": "Voltar",
+    "reintentar": "Tentar de novo"
+  }
+}

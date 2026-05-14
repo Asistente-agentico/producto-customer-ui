@@ -1,0 +1,70 @@
+{
+  "app": {
+    "titulo": "Asistentes Virtuales",
+    "subtitulo": "Sistema integrado de gestión productiva"
+  },
+  "nav": {
+    "chat": "Chat",
+    "dashboard": "Panel",
+    "reportes": "Reportes",
+    "configuracion": "Configuración",
+    "perfil": "Perfil",
+    "cerrar_sesion": "Cerrar sesión",
+    "menu": "Abrir menú",
+    "cerrar": "Cerrar"
+  },
+  "auth": {
+    "iniciar_sesion": "Iniciar sesión",
+    "usuario": "Usuario",
+    "password": "Contraseña",
+    "recordar": "Recordarme en este dispositivo",
+    "sesion_expirada": "Tu sesión expiró. Volvé a iniciar sesión.",
+    "verificando": "Verificando sesión..."
+  },
+  "chat": {
+    "input_placeholder": "Escribe tu consulta...",
+    "enviar": "Enviar",
+    "pensando": "Pensando...",
+    "respuesta_vacia": "Sin respuesta.",
+    "sugerencias": "Sugerencias",
+    "nueva_conversacion": "Nueva conversación",
+    "asistente": "Asistente",
+    "tu": "Vos",
+    "ver_fuentes": "Ver fuentes",
+    "ocultar_fuentes": "Ocultar fuentes",
+    "fuentes_resumen": "{{count}} chunks · {{scopes}}",
+    "tipo_artefacto_desconocido": "Tipo de artefacto no reconocido"
+  },
+  "acciones": {
+    "confirmar": "Confirmar",
+    "descartar": "Descartar",
+    "editar": "Editar",
+    "riesgo_bajo": "Riesgo bajo",
+    "riesgo_medio": "Riesgo medio",
+    "riesgo_alto": "Riesgo alto",
+    "doble_confirmacion": "Para confirmar, escribí: {{frase}}"
+  },
+  "errores": {
+    "generico": "Algo salió mal. Intentá de nuevo.",
+    "red": "Sin conexión con el servidor.",
+    "rbac": "No tenés permisos para realizar esta operación.",
+    "validacion": "Algunos datos no son válidos.",
+    "bloqueado_llm": "La consulta fue bloqueada por políticas de seguridad.",
+    "upgrade_required": "Esta versión del cliente ya no es compatible. Refrescá la página.",
+    "mantenimiento": "El servicio está en mantenimiento. Volvé pronto.",
+    "capabilities_no_disponibles": "La configuración del sistema no está disponible. Funcionalidad limitada."
+  },
+  "version": {
+    "nueva_disponible": "Hay una versión nueva disponible. Refrescá la página para actualizar.",
+    "refrescar": "Refrescar"
+  },
+  "comun": {
+    "cargando": "Cargando...",
+    "guardar": "Guardar",
+    "cancelar": "Cancelar",
+    "aceptar": "Aceptar",
+    "descargar": "Descargar",
+    "volver": "Volver",
+    "reintentar": "Reintentar"
+  }
+}
