@@ -14,6 +14,7 @@ const ChatPage = lazy(() => import('@/features/chat/ChatPage'));
 const DashboardPage = lazy(() => import('@/features/kpis/DashboardPage'));
 const ReportesPage = lazy(() => import('@/features/reportes/ReportesPage'));
 const ConfiguracionPage = lazy(() => import('@/features/configuracion/ConfiguracionPage'));
+const AccionesPage = lazy(() => import('@/features/acciones/AccionesPage'));
 
 function PageLoader() {
   const { t } = useTranslation();
@@ -55,8 +56,12 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/chat" replace /> },
       { path: 'chat', element: <ChatPage /> },
       { path: 'chat/:conversacionId', element: <ChatPage /> },
+      // /on-line es el nombre v2 del módulo KPIs streaming (Q3).
+      // /dashboard se mantiene como alias hasta PR 5.
+      { path: 'on-line', element: <DashboardPage /> },
       { path: 'dashboard', element: <DashboardPage /> },
       { path: 'reportes', element: <ReportesPage /> },
+      { path: 'acciones', element: <AccionesPage /> },
       { path: 'configuracion', element: <ConfiguracionPage /> },
     ],
   },
