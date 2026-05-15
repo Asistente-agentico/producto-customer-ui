@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<title>Overview · Asistente Virtual</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --paper: #FAFAF7;
+    --ink:   #0A0A0A;
+    --ink2:  #5C5C5C;
+    --ink3:  #9A958B;
+    --rule:  #EDEAE0;
+    --navy:  #0A2540;
+    --coral: #E85C3C;
+    --cream: #F2EEDF;
+    --bg:    #F2EFE7;
+  }
+  html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); font-family: 'Plus Jakarta Sans', system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(242,239,231,.88);
+    backdrop-filter: blur(14px) saturate(140%);
+    border-bottom: 1px solid var(--rule);
+  }
+  .topbar-inner { max-width: 1480px; margin: 0 auto; padding: 18px 32px; display: flex; align-items: baseline; justify-content: space-between; gap: 24px; }
+  .topbar h1 { font-family: 'Fraunces', serif; font-size: 22px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
+  .topbar .meta { font-size: 11.5px; font-family: 'JetBrains Mono', monospace; color: var(--ink3); text-transform: uppercase; letter-spacing: .06em; }
+  .topbar .pill { padding: 2px 8px; border-radius: 99px; background: var(--navy); color: var(--cream); font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .04em; }
+
+  main { max-width: 1480px; margin: 0 auto; padding: 32px; }
+
+  section { margin-bottom: 56px; }
+  .sec-head { margin-bottom: 18px; display: flex; align-items: baseline; gap: 12px; }
+  .sec-num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; border-radius: 6px;
+    background: var(--navy); color: var(--cream);
+    font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 12px;
+  }
+  .sec-title { font-family: 'Fraunces', serif; font-size: 26px; font-weight: 600; letter-spacing: -.01em; margin: 0; }
+  .sec-sub { color: var(--ink2); font-size: 13.5px; margin-top: 4px; max-width: 720px; text-wrap: pretty; }
+
+  .grid { display: grid; gap: 20px; }
+  .grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+  .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+  .grid.cols-4 { grid-template-columns: repeat(4, 1fr); }
+  @media (max-width: 1100px) {
+    .grid.cols-3, .grid.cols-4 { grid-template-columns: repeat(2, 1fr); }
+  }
+  @media (max-width: 720px) {
+    .grid.cols-2, .grid.cols-3, .grid.cols-4 { grid-template-columns: 1fr; }
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow .15s, transform .15s, border-color .15s;
+  }
+  .card:hover { box-shadow: 0 14px 36px -18px rgba(10,37,64,.28); border-color: rgba(10,37,64,.25); }
+
+  .card-head {
+    padding: 12px 14px;
+    border-bottom: 1px solid var(--rule);
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 10px;
+  }
+  .card-label {
+    font-size: 13px; font-weight: 500; letter-spacing: -.005em;
+    color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .card-btn {
+    appearance: none; border: 1px solid var(--rule); background: var(--paper);
+    color: var(--ink2); font-size: 11px; font-family: inherit;
+    padding: 4px 8px; border-radius: 5px; cursor: pointer; line-height: 1;
+    display: inline-flex; align-items: center; gap: 4px;
+    transition: background .12s, border-color .12s, color .12s;
+  }
+  .card-btn:hover { color: var(--ink); border-color: rgba(10,37,64,.4); background: #fff; }
+
+  .frame {
+    position: relative;
+    width: 100%;
+    background: var(--paper);
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .frame-desktop { aspect-ratio: 16 / 10; }
+  .frame-mobile  { aspect-ratio: 9 / 18;  }
+
+  .frame iframe {
+    position: absolute; top: 0; left: 0;
+    border: 0; background: var(--paper);
+    transform-origin: top left;
+    width: var(--w, 1400px);
+    height: var(--h, 875px);
+    transform: scale(var(--scale, 0.36));
+    pointer-events: none;
+  }
+
+  .card-note {
+    padding: 10px 14px;
+    background: var(--paper);
+    border-top: 1px solid var(--rule);
+    font-size: 11.5px; color: var(--ink2);
+    text-wrap: pretty;
+  }
+  .card-note .mono { color: var(--ink3); font-size: 10.5px; }
+
+  .lightbox {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(10, 20, 30, .82);
+    backdrop-filter: blur(6px);
+    display: flex; flex-direction: column;
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s;
+  }
+  .lightbox.open { opacity: 1; pointer-events: auto; }
+  .lightbox-head {
+    padding: 14px 22px; color: var(--cream);
+    display: flex; align-items: center; justify-content: space-between; gap: 14px;
+  }
+  .lightbox-title { font-family: 'Fraunces', serif; font-size: 16px; }
+  .lightbox-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: rgba(242,238,223,.55); text-transform: uppercase; letter-spacing: .06em; }
+  .lightbox-body {
+    flex: 1; margin: 0 22px 22px; border-radius: 10px; overflow: hidden;
+    background: var(--paper);
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,.6);
+  }
+  .lightbox iframe { width: 100%; height: 100%; border: 0; }
+  .lb-close, .lb-nav {
+    appearance: none; border: 0; background: rgba(242,238,223,.1); color: var(--cream);
+    width: 32px; height: 32px; border-radius: 7px; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 16px; line-height: 1;
+    transition: background .12s;
+  }
+  .lb-close:hover, .lb-nav:hover { background: rgba(242,238,223,.2); }
+  .lb-nav-group { display: flex; gap: 6px; align-items: center; }
+  .lb-kbd { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: rgba(242,238,223,.45); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div>
+      <h1>Asistente Virtual · Overview</h1>
+      <div class="meta" style="margin-top: 4px;">Vista panorámica · todas las pantallas trabajadas</div>
+    </div>
+    <span class="pill">v2.4.1</span>
+  </div>
+</header>
+
+<main id="grid"></main>
+
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-head">
+    <div>
+      <div class="lightbox-title" id="lb-title">—</div>
+      <div class="lightbox-meta"  id="lb-meta">—</div>
+    </div>
+    <div class="lb-nav-group">
+      <span class="lb-kbd">← →</span>
+      <button class="lb-nav" id="lb-prev" aria-label="Anterior">‹</button>
+      <button class="lb-nav" id="lb-next" aria-label="Siguiente">›</button>
+      <span class="lb-kbd" style="margin-left: 10px;">esc</span>
+      <button class="lb-close" id="lb-close" aria-label="Cerrar">×</button>
+    </div>
+  </div>
+  <div class="lightbox-body">
+    <iframe id="lb-frame" src="about:blank"></iframe>
+  </div>
+</div>
+
+<script>
+  const SECTIONS = [
+    {
+      id: 'auth', n: 1,
+      title: 'Autenticación',
+      sub:   'Pre-shell. Dos modos según AUTH_MODE: IAM interno o IdP externo OIDC. Splash de bootstrap mientras se cargan capabilities, módulos contratados, marca, conversaciones del usuario.',
+      cols: 3,
+      shape: 'desktop',
+      items: [
+        { label: 'Login · IAM interno',  hash: '#view=login',           note: 'Formulario user/password. Modo iam_interno.' },
+        { label: 'Login · IdP externo',  hash: '#view=login&idp=true',  note: 'Redirect a IdP del cliente (OIDC Auth Code + PKCE).' },
+        { label: 'Bootstrap',            hash: '#view=bootstrap',       note: '7 pasos: autenticando · capabilities · marca · permisos · módulos · conversaciones · asistente listo.' },
+      ],
+    },
+    {
+      id: 'shell', n: 2,
+      title: 'Shell · vistas principales',
+      sub:   'Cabecera única con identidad, toggles on/off (Última · Pendientes · KPI), cluster de módulos. Sidebar contextual al chat. Banda de KPIs colapsable. Footer "Powered by OPCiber".',
+      cols: 2,
+      shape: 'desktop',
+      items: [
+        { label: 'Chat · empty state',       hash: '#view=empty', note: 'Pantalla limpia al inicio. Hint para empezar a conversar o usar "Última".' },
+        { label: 'on-line · KPIs streaming', hash: '#view=kpis',  note: '6 indicadores en vivo + tabla por centro. Vista del módulo KPIs.' },
+        { label: 'Reportes Gerencia X',      hash: '#view=reports-catalog', note: 'Catálogo gerencia-aware. Filtros: todos · habilitados · no habilitados. Dueño + versión + tipo en cada tarjeta.' },
+        { label: 'Acciones · seguimiento',   hash: '#view=actions', note: 'Cola lateral con resumen de acciones y estados. Fondo principal limpio hasta seleccionar una.' },
+      ],
+    },
+    {
+      id: 'overlays', n: 3,
+      title: 'Paneles y overlays',
+      sub:   'Estilo Claude.ai. Notificaciones desplegadas, transparencia de permisos JWT, preview de reportes antes de descargar.',
+      cols: 3,
+      shape: 'desktop',
+      items: [
+        { label: 'Notificaciones desplegadas',   hash: '#view=chat&notif=open',            note: 'Dropdown con sin leer + filtros. Filtra por módulos activos.' },
+        { label: '¿Qué estoy viendo? · permisos', hash: '#view=chat&panel=permisos',        note: 'Filtros JWT aplicados + bloqueados + nota de PII oculta.' },
+        { label: 'Reporte · vista previa',       hash: '#view=chat&panel=report-preview',  note: 'Preview tabular + descarga en formatos del cliente (Excel · PDF · PPT · Power BI).' },
+      ],
+    },
+    {
+      id: 'mobile', n: 4,
+      title: 'Mobile · responsive',
+      sub:   'Must-have para varios clientes. Misma shell capability-driven, drawer en vez de sidebar, composer fijo al fondo.',
+      cols: 4,
+      shape: 'mobile',
+      items: [
+        { label: 'Mobile · empty',    hash: '#view=empty&mobile=true',           note: 'Saludo compacto, sugerencias, recientes.' },
+        { label: 'Mobile · chat',     hash: '#view=chat&mobile=true',            note: 'Thread con artefactos en una columna.' },
+        { label: 'Mobile · KPIs',     hash: '#view=kpis&mobile=true',            note: 'Cards apiladas. Tabla con scroll horizontal.' },
+        { label: 'Mobile · Acciones', hash: '#view=actions&mobile=true',         note: 'Cola apilada. Detalle accesible desde un tap.' },
+      ],
+    },
+  ];
+
+  const grid = document.getElementById('grid');
+  const ALL = [];
+
+  SECTIONS.forEach((sec) => {
+    const section = document.createElement('section');
+    section.id = sec.id;
+    section.innerHTML = `
+      <div class="sec-head">
+        <span class="sec-num">${sec.n}</span>
+        <div>
+          <h2 class="sec-title">${sec.title}</h2>
+          <p class="sec-sub">${sec.sub}</p>
+        </div>
+      </div>
+      <div class="grid cols-${sec.cols}" data-grid></div>
+    `;
+    const gridEl = section.querySelector('[data-grid]');
+    sec.items.forEach((it) => {
+      const idx = ALL.length;
+      ALL.push({ ...it, idx, sec: sec.title });
+      const card = document.createElement('div');
+      card.className = 'card';
+      const isMobile = sec.shape === 'mobile';
+      const w = isMobile ? 480 : 1400;
+      const h = isMobile ? 920 : 875;
+      card.innerHTML = `
+        <div class="card-head">
+          <div class="card-label">${it.label}</div>
+          <button class="card-btn" data-open="${idx}" title="Abrir en grande">⤢ Abrir</button>
+        </div>
+        <div class="frame frame-${isMobile ? 'mobile' : 'desktop'}"
+             style="--w:${w}px; --h:${h}px;"
+             data-frame data-idx="${idx}">
+          <iframe loading="lazy" src="index.html${it.hash}"></iframe>
+        </div>
+        <div class="card-note">${it.note}<br><span class="mono">${it.hash || '(default)'}</span></div>
+      `;
+      gridEl.appendChild(card);
+      card.querySelector('[data-frame]').addEventListener('click', () => openLightbox(idx));
+    });
+    grid.appendChild(section);
+  });
+
+  function updateScales() {
+    document.querySelectorAll('[data-frame]').forEach((f) => {
+      const w = parseFloat(getComputedStyle(f).getPropertyValue('--w')) || 1400;
+      const h = parseFloat(getComputedStyle(f).getPropertyValue('--h')) || 875;
+      const rect = f.getBoundingClientRect();
+      const sx = rect.width  / w;
+      const sy = rect.height / h;
+      const s = Math.min(sx, sy);
+      const iframe = f.querySelector('iframe');
+      if (iframe) iframe.style.transform = `scale(${s})`;
+    });
+  }
+  updateScales();
+  window.addEventListener('resize', () => requestAnimationFrame(updateScales));
+  new ResizeObserver(updateScales).observe(document.body);
+
+  const lb = document.getElementById('lightbox');
+  const lbFrame = document.getElementById('lb-frame');
+  const lbTitle = document.getElementById('lb-title');
+  const lbMeta  = document.getElementById('lb-meta');
+  let lbIdx = -1;
+
+  function openLightbox(idx) {
+    lbIdx = idx;
+    const it = ALL[idx];
+    lbTitle.textContent = it.label;
+    lbMeta.textContent  = `${it.sec} · ${it.hash || '(default)'}`;
+    lbFrame.src = 'index.html' + it.hash;
+    lb.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLightbox() {
+    lb.classList.remove('open');
+    lbFrame.src = 'about:blank';
+    document.body.style.overflow = '';
+  }
+  function navLightbox(delta) {
+    if (lbIdx < 0) return;
+    openLightbox((lbIdx + delta + ALL.length) % ALL.length);
+  }
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lb-prev').addEventListener('click', () => navLightbox(-1));
+  document.getElementById('lb-next').addEventListener('click', () => navLightbox(+1));
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-open]');
+    if (t) { openLightbox(parseInt(t.dataset.open, 10)); e.stopPropagation(); }
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!lb.classList.contains('open')) return;
+    if (e.key === 'Escape')    closeLightbox();
+    if (e.key === 'ArrowLeft') navLightbox(-1);
+    if (e.key === 'ArrowRight')navLightbox(+1);
+  });
+</script>
+</body>
+</html>

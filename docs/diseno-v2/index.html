@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=1280" />
+<title>Asistente · Salmones Antártica</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          paper:   '#FAFAF7',
+          ink:     '#0A0A0A',
+          ink2:    '#5C5C5C',
+          ink3:    '#9A958B',
+          rule:    '#EDEAE0',
+          navy:    '#0A2540',
+          'navy-2':'#0E2D4D',
+          'navy-3':'#163960',
+          cream:   '#F2EEDF',
+          'cream-2':'#D9D2BD',
+          coral:   '#E85C3C',
+          'coral-2':'#C94A2D',
+          ok:      '#2D7D6F',
+          warn:    '#B8860B',
+        },
+        fontFamily: {
+          display: ['"Fraunces"', 'serif'],
+          sans:    ['"Plus Jakarta Sans"', 'system-ui', 'sans-serif'],
+          mono:    ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
+        },
+      }
+    }
+  }
+</script>
+
+<style>
+  html, body { background: #FAFAF7; color: #0A0A0A; font-family: 'Plus Jakarta Sans', system-ui, sans-serif; }
+  body { font-feature-settings: 'ss01', 'cv11'; -webkit-font-smoothing: antialiased; }
+
+  /* Custom scrollbars — thin, editorial */
+  .scroll-paper::-webkit-scrollbar { width: 10px; height: 10px; }
+  .scroll-paper::-webkit-scrollbar-track { background: transparent; }
+  .scroll-paper::-webkit-scrollbar-thumb { background: #EDEAE0; border-radius: 999px; border: 3px solid #FAFAF7; }
+  .scroll-paper::-webkit-scrollbar-thumb:hover { background: #D9D2BD; }
+
+  .scroll-navy::-webkit-scrollbar { width: 10px; }
+  .scroll-navy::-webkit-scrollbar-track { background: rgba(0,0,0,.15); }
+  .scroll-navy::-webkit-scrollbar-thumb { background: rgba(242,238,223,.28); border-radius: 999px; }
+  .scroll-navy::-webkit-scrollbar-thumb:hover { background: rgba(242,238,223,.45); }
+
+  /* Staggered entry */
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(8px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .rise { animation: rise .55s cubic-bezier(.2,.7,.2,1) both; }
+
+  @keyframes pulseDot {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: .35; }
+  }
+  .pulse-dot { animation: pulseDot 1.6s ease-in-out infinite; }
+
+  /* Caret blink for streaming text */
+  @keyframes blink { 50% { opacity: 0; } }
+  .caret { display: inline-block; width: 7px; height: 1em; transform: translateY(2px); background: #0A0A0A; margin-left: 2px; animation: blink 1s steps(2, end) infinite; }
+
+  /* Subtle paper grain in the message column */
+  .grain {
+    background-image:
+      radial-gradient(rgba(10,10,10,.025) 1px, transparent 1px),
+      radial-gradient(rgba(10,10,10,.02) 1px, transparent 1px);
+    background-size: 3px 3px, 7px 7px;
+    background-position: 0 0, 1px 2px;
+  }
+
+  /* Mono small caps for labels */
+  .mono-label { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: .08em; text-transform: uppercase; }
+
+  /* Display kerning */
+  .font-display { font-optical-sizing: auto; letter-spacing: -0.01em; }
+
+  /* Focus ring */
+  textarea:focus, input:focus, button:focus-visible { outline: none; }
+  .focus-ring:focus-within { box-shadow: 0 0 0 1px #0A2540, 0 8px 24px -12px rgba(10,37,64,.25); }
+
+  /* Hide scrollbar arrows in Firefox */
+  * { scrollbar-width: thin; scrollbar-color: #EDEAE0 transparent; }
+</style>
+</head>
+<body class="min-h-screen">
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="icons.jsx"></script>
+  <script type="text/babel" src="state.jsx"></script>
+  <script type="text/babel" src="conversation.jsx"></script>
+  <script type="text/babel" src="topbar.jsx"></script>
+  <script type="text/babel" src="kpi-band.jsx"></script>
+  <script type="text/babel" src="sidebar.jsx"></script>
+  <script type="text/babel" src="embeds.jsx"></script>
+  <script type="text/babel" src="chat.jsx"></script>
+  <script type="text/babel" src="composer.jsx"></script>
+  <script type="text/babel" src="panels.jsx"></script>
+  <script type="text/babel" src="view-kpis-and-auth.jsx"></script>
+  <script type="text/babel" src="view-reports.jsx"></script>
+  <script type="text/babel" src="view-actions.jsx"></script>
+  <script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
