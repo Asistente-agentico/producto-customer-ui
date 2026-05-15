@@ -26,6 +26,7 @@
 | ID | Título | Estado | Prioridad | Origen |
 |---|---|---|---|---|
 | DT-01 | Panel lateral del Login con copy + módulos contratados | abierta | media | UAT · bloque A1 |
+| DT-02 | MSW no resuelve preflight CORS de módulos opcionales en dev | abierta | alta | UAT · bloque F |
 
 ---
 
@@ -191,6 +192,104 @@ El Login funciona pero pierde:
 
 **Riesgo de no resolverlo**: bajo. Es polish visual + UX. La
 funcionalidad core (autenticarse) está completa y es accesible.
+
+---
+
+## DT-02 · MSW no resuelve preflight CORS de módulos opcionales en dev
+
+**Origen**: UAT — bloque F (Reportes). Al clickear "Reportes" en la
+TopBar el browser muestra error y la página queda en estado de error.
+**PR relacionado**: PR 1 (cliente HTTP con `credentials: 'include'`),
+PR 5 / PR 7 / PR 8 (mocks de KPIs, Reportes y Acciones en orígenes
+propios).
+**Estado**: abierta.
+**Prioridad**: alta · bloquea el UAT de los 3 módulos opcionales en
+dev local. **En producción no aparece** si el deploy usa
+reverse-proxy same-origin (recomendación del spec §14.2).
+
+### Síntoma observado
+
+Al navegar a `/reportes` (o `/on-line`, o `/acciones`):
+- El query de TanStack Query queda en `isError = true`.
+- En el panel principal aparece un `ApiError` (típicamente
+  "TypeError: Failed to fetch").
+- En la consola del browser hay un error CORS o de preflight.
+
+### Causa
+
+El cliente HTTP (`src/api/client.ts`) hace todas las llamadas con
+`credentials: 'include'` para que las cookies HttpOnly del JWT
+viajen automáticamente (requisito del spec §4.1).
+
+Los módulos opcionales tienen `base_url` distintos al central:
+
+| Módulo | base_url |
+|---|---|
+| central | `http://localhost:8080` |
+| reportes | `http://localhost:8081` |
+| kpis | `http://localhost:8082` |
+| acciones | `http://localhost:8083` |
+
+En dev el browser está en `http://localhost:5173`. Cualquier fetch
+con `credentials: 'include'` a un origen distinto dispara un
+**preflight `OPTIONS`** del browser (CORS · sección 4.9 del spec).
+
+Los handlers de MSW para esos módulos solo registran los métodos
+funcionales (`http.get(...)`, `http.post(...)`) — **no registran
+`http.options(...)` ni headers `Access-Control-Allow-*`**. El
+service worker de MSW v2 no responde al preflight, el browser ve
+la falta de headers CORS y bloquea la fetch antes de que llegue a
+su handler GET/POST.
+
+### Por qué no se detectó antes
+
+Los tests usan MSW en modo **node (`setupServer`)** que NO ejecuta
+preflight CORS — es interceptación pura de la fetch de Node. En
+browser con `setupWorker`, el preflight sí existe.
+
+### Resolución propuesta
+
+**Opción A · Agregar handlers OPTIONS + headers CORS a los 3 mocks**
+(recomendada para desbloquear UAT dev).
+
+En cada `mocks/handlers/{reportes,kpis,acciones}.ts`:
+
+```ts
+http.options(`${BASE}/*`, () =>
+  new HttpResponse(null, {
+    status: 204,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, PUT, PATCH, DELETE',
+      'Access-Control-Allow-Headers':
+        'Content-Type, Authorization, X-Client-Version, Accept-Language',
+      'Access-Control-Allow-Credentials': 'true',
+    },
+  }),
+),
+```
+
+Más agregar los headers `Access-Control-Allow-*` en cada
+`HttpResponse.json(...)` de los 3 handlers.
+
+**Opción B · Vite `server.proxy` same-origin** (más cercano a prod).
+Configurar proxy en `vite.config.ts` para mapear `/reportes`,
+`/kpis`, `/acciones` al mismo origen `:5173` y ajustar el fixture de
+capabilities en dev para usar paths relativos en lugar de hosts.
+
+**Opción C · Quitar `credentials: 'include'` en cross-origin** —
+descartada · viola el spec §4.1 (JWT en cookies HttpOnly).
+
+### Decisión pendiente
+
+1. ¿Implementamos Opción A ya para desbloquear el resto del UAT?
+2. ¿O Opción B (proxy de Vite) que simula mejor producción?
+
+### Mientras no se resuelva
+
+- UAT bloqueado para Reportes, KPIs y Acciones en `npm run dev`.
+- Tests unitarios siguen verde (usan Node `setupServer`).
+- Producción no afectada si el deploy usa reverse-proxy same-origin.
 
 ---
 
