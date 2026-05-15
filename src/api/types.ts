@@ -600,6 +600,10 @@ export const ConversacionListItemSchema = z
     id: z.string(),
     titulo: z.string(),
     asistente_id: z.string().optional(),
+    // PR 4 · ámbito del sidebar (handoff §3.3 + Q2). El central V2 lo
+    // emite calculado server-side; mientras tanto la UI lo detecta
+    // con `detectAmbito` y lo persiste al crear la conversación.
+    ambito_id: z.string().optional(),
     creado_en: z.string(),
     actualizado_en: z.string().optional(),
   })

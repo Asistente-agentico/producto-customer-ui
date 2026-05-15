@@ -6,6 +6,8 @@ import { type MensajeRequest, type MensajeResponse, normalizeMensajeResponse } f
 import { captureError } from '@/observability';
 import { useConversacionesStore } from '@/stores/conversaciones';
 import { conversacionesQueryKey } from '@/features/conversaciones/queries';
+import { useCapabilities } from '@/stores/capabilities';
+import { tituloConversacion } from '@/lib/ambitos';
 
 export type UserMessage = {
   rol: 'user';
@@ -31,6 +33,7 @@ export function useChat({ conversacionId }: Args) {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const setLast = useConversacionesStore((s) => s.setLast);
+  const asistenteActivoId = useCapabilities((s) => s.capabilities?.asistente_activo?.id);
 
   // Recordar última conversación cuando se navega a una.
   useEffect(() => {
@@ -64,15 +67,27 @@ export function useChat({ conversacionId }: Args) {
       asistente_id?: string;
       hints?: Record<string, string>;
     }) => {
+      const asistente = input.asistente_id ?? asistenteActivoId;
+      // PR 4 · auto-registro: si es la primera consulta (no hay conv),
+      // creamos pasando `texto_inicial` para que el backend (o el mock)
+      // resuelva el `ambito_id` server-side. Q2: la UI no calcula
+      // ámbito en este flujo — el central lo hace.
       const id =
-        conversacionId ?? (await crearConversacion({ titulo: input.texto.slice(0, 60) })).id;
+        conversacionId ??
+        (
+          await crearConversacion({
+            titulo: tituloConversacion(input.texto),
+            asistente_id: asistente,
+            texto_inicial: input.texto,
+          })
+        ).id;
       if (!conversacionId) {
         setLast(id);
         navigate(`/chat/${id}`, { replace: true });
       }
       const body: MensajeRequest = {
         texto: input.texto,
-        asistente_id: input.asistente_id,
+        asistente_id: asistente,
         hints: input.hints,
       };
       const response = await enviarMensaje(id, body);

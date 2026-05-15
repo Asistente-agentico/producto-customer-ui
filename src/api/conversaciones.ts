@@ -19,8 +19,12 @@ export async function listConversaciones(cursor?: string): Promise<ConversacionL
 export async function crearConversacion(args: {
   titulo?: string;
   asistente_id?: string;
-}): Promise<{ id: string; titulo: string }> {
-  return api.post<{ id: string; titulo: string }>('/conversaciones', args);
+  /** PR 4 · si se pasa, el backend resuelve `ambito_id` server-side. */
+  texto_inicial?: string;
+  /** PR 4 · alternativa explícita: cliente envía el ámbito ya detectado. */
+  ambito_id?: string;
+}): Promise<{ id: string; titulo: string; ambito_id?: string }> {
+  return api.post<{ id: string; titulo: string; ambito_id?: string }>('/conversaciones', args);
 }
 
 export async function eliminarConversacion(id: string): Promise<void> {
