@@ -113,14 +113,50 @@ if (typeof window !== 'undefined') {
 /**
  * Aplica el branding del tenant: CSS vars, document.title, favicon.
  * Se llama tras cada fetch exitoso de /capabilities.
+ *
+ * Soporta dos paletas:
+ * - v1.x: `primario` / `sidebar` / `acento` (alias mantenidos)
+ * - v2.0: `navy` / `coral` / `paper` / `cream` (paleta semántica)
+ *
+ * Si la v2 está presente la prefiere y mapea a las CSS vars legacy
+ * para que el código existente (que lee `--color-sidebar` etc.)
+ * siga funcionando sin tocar.
  */
 export function applyCapabilities(caps: Capabilities): void {
   if (typeof document === 'undefined') return;
   const root = document.documentElement;
   const colores = caps.ui.colores ?? {};
-  if (colores.primario) root.style.setProperty('--color-primary', colores.primario);
-  if (colores.sidebar) root.style.setProperty('--color-sidebar', colores.sidebar);
-  if (colores.acento) root.style.setProperty('--color-accent', colores.acento);
+
+  // Paleta v2 → mapeo a CSS vars semánticas + legacy.
+  if (colores.navy) {
+    root.style.setProperty('--color-navy', colores.navy);
+    root.style.setProperty('--color-sidebar', colores.navy);
+  }
+  if (colores.coral) {
+    root.style.setProperty('--color-coral', colores.coral);
+    root.style.setProperty('--color-accent', colores.coral);
+  }
+  if (colores.paper) {
+    root.style.setProperty('--color-paper', colores.paper);
+    root.style.setProperty('--color-primary', colores.paper);
+  }
+  if (colores.cream) root.style.setProperty('--color-cream', colores.cream);
+  if (colores.rule) root.style.setProperty('--color-rule', colores.rule);
+  if (colores.ink) root.style.setProperty('--color-ink', colores.ink);
+  if (colores.ok) root.style.setProperty('--color-ok', colores.ok);
+  if (colores.warn) root.style.setProperty('--color-warn', colores.warn);
+  if (colores.cream_band) root.style.setProperty('--color-cream-band', colores.cream_band);
+
+  // Paleta v1 — solo aplica si no hubo override v2.
+  if (!colores.paper && colores.primario) {
+    root.style.setProperty('--color-primary', colores.primario);
+  }
+  if (!colores.navy && colores.sidebar) {
+    root.style.setProperty('--color-sidebar', colores.sidebar);
+  }
+  if (!colores.coral && colores.acento) {
+    root.style.setProperty('--color-accent', colores.acento);
+  }
 
   if (caps.ui.titulo) {
     document.title = caps.ui.titulo;

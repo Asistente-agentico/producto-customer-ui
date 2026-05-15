@@ -64,11 +64,28 @@ export const CapabilitiesUiSchema = z
     favicon_url: z.string().optional(),
     icono_sistema: z.string().optional(),
     icono_emoji: z.string().optional(),
+    // PR 0: alias del v2.0 — `logo_letras` reemplaza a `icono_sistema`
+    // pero ambos siguen aceptándose. `applyCapabilities` prefiere
+    // `logo_letras` si está presente.
+    logo_letras: z.string().optional(),
     colores: z
       .object({
+        // Spec v1.x — alias mantenidos para retro-compat.
         primario: z.string().optional(),
         sidebar: z.string().optional(),
         acento: z.string().optional(),
+        // Spec v2.0 — paleta semántica del prototipo Omelette.
+        // El consumidor (`applyCapabilities`) prefiere los nombres v2
+        // si están presentes y cae a los v1 si no.
+        navy: z.string().optional(),
+        coral: z.string().optional(),
+        paper: z.string().optional(),
+        cream: z.string().optional(),
+        rule: z.string().optional(),
+        ink: z.string().optional(),
+        ok: z.string().optional(),
+        warn: z.string().optional(),
+        cream_band: z.string().optional(),
       })
       .partial()
       .optional(),
@@ -115,6 +132,82 @@ export const ModuloConfigSchema = z
   })
   .passthrough();
 
+// PR 0: snapshot inicial de KPI configurado por usuario (banda inline
+// del prototipo Omelette). Diferenciado del SSE del dashboard:
+// estos son los KPIs *configurados* del usuario; el stream actualiza
+// los valores en vivo.
+export const KpiConfiguradoSchema = z
+  .object({
+    id: z.string(),
+    label: z.string(),
+    value: z.union([z.string(), z.number()]).optional(),
+    delta: z.string().optional(),
+    severity: z.enum(['ok', 'warn', 'bad']).optional(),
+    chart: z.enum(['line', 'bar', 'gauge', 'progress']).optional(),
+    subtitle: z.string().optional(),
+    series: z.array(z.number()).optional(),
+    bars: z.array(z.tuple([z.string(), z.number(), z.number()])).optional(),
+    target: z
+      .object({
+        lo: z.number().optional(),
+        hi: z.number().optional(),
+        label: z.string().optional(),
+      })
+      .optional(),
+    gaugeValue: z.number().optional(),
+    gaugeMin: z.number().optional(),
+    gaugeMax: z.number().optional(),
+    gaugeTarget: z.number().optional(),
+    progress: z.object({ value: z.number(), target: z.number() }).optional(),
+    stats: z.array(z.tuple([z.string(), z.string()])).optional(),
+  })
+  .passthrough();
+
+export type KpiConfigurado = z.infer<typeof KpiConfiguradoSchema>;
+
+// PR 0: filtro JWT visible para auditoría — el central V2 lo expone en
+// capabilities.usuario.filtros_jwt (antes solo aparecía en
+// metadata.permisos_aplicados.filtros_jwt_aplicados por mensaje).
+export const FiltroJwtSchema = z
+  .object({
+    campo: z.string(),
+    valor: z.string(),
+    aplica_a: z.string().optional(),
+  })
+  .passthrough();
+
+// PR 0: items bloqueados que la UI muestra como tales (KPIs con
+// candado, acciones grises). Razón legible.
+export const ItemBloqueadoSchema = z
+  .object({
+    tipo: z.string(),
+    nombre: z.string(),
+    razon: z.string().optional(),
+  })
+  .passthrough();
+
+// PR 0: ámbito autorizado del usuario — derivado de rol + gerencia en
+// el central. Lista plana de slugs.
+export const AmbitoAutorizadoSchema = z
+  .object({
+    id: z.string(),
+    nombre: z.string(),
+  })
+  .passthrough();
+
+export type AmbitoAutorizado = z.infer<typeof AmbitoAutorizadoSchema>;
+
+// PR 0: asistente_activo singular del v2.0. Coexiste con ui.asistentes[]
+// hasta que se resuelva Q6 (asistente único vs múltiples).
+export const AsistenteActivoSchema = z
+  .object({
+    id: z.string(),
+    nombre: z.string(),
+    subtitulo: z.string().optional(),
+    version: z.string().optional(),
+  })
+  .passthrough();
+
 export const CapabilitiesSchema = z
   .object({
     version: z.string(),
@@ -124,6 +217,9 @@ export const CapabilitiesSchema = z
         id: z.string(),
         nombre: z.string().optional(),
         expira: z.string().optional(),
+        // PR 0: campos v2.0.
+        dominio: z.string().optional(),
+        region: z.string().optional(),
       })
       .passthrough(),
     usuario: z
@@ -132,6 +228,15 @@ export const CapabilitiesSchema = z
         rol: z.string(),
         gerencia: z.string().optional(),
         permisos: z.array(z.string()).default([]),
+        // PR 0: campos v2.0 — todos opcionales para retro-compat.
+        nombre: z.string().optional(),
+        iniciales: z.string().optional(),
+        rol_id: z.string().optional(),
+        email_institucional: z.string().email().optional(),
+        idioma: z.string().optional(),
+        filtros_jwt: z.array(FiltroJwtSchema).optional(),
+        bloqueados: z.array(ItemBloqueadoSchema).optional(),
+        kpis_configurados: z.array(KpiConfiguradoSchema).optional(),
       })
       .passthrough(),
     modulos: z
@@ -140,6 +245,8 @@ export const CapabilitiesSchema = z
         reportes: ModuloConfigSchema.optional(),
         kpis: ModuloConfigSchema.optional(),
         acciones: ModuloConfigSchema.optional(),
+        // PR 0: módulo ML del v2.0.
+        ml: ModuloConfigSchema.optional(),
       })
       .passthrough(),
     ui: CapabilitiesUiSchema,
@@ -151,6 +258,9 @@ export const CapabilitiesSchema = z
       })
       .passthrough()
       .optional(),
+    // PR 0: campos v2.0 top-level.
+    asistente_activo: AsistenteActivoSchema.optional(),
+    ambitos_autorizados: z.array(AmbitoAutorizadoSchema).optional(),
   })
   .passthrough();
 
