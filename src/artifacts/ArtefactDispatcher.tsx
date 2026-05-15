@@ -12,7 +12,10 @@ const ImagenCard = lazy(() => import('./ImagenCard'));
 const BannerCard = lazy(() => import('./BannerCard'));
 const ProgresoCard = lazy(() => import('./ProgresoCard'));
 const AccionPropuestaCard = lazy(() => import('./AccionPropuestaCard'));
-const ArchivoDescargableCard = lazy(() => import('./ArchivoDescargableCard'));
+// Q11 · `ArchivoDescargableCard` eliminado del dispatcher por política
+// firme (Reportes es el único canal de salida de datos). El componente
+// fue borrado del repo. Si llega un artefacto `archivo_descargable`,
+// cae a `UnknownArtifactPlaceholder` (vía `parseArtefacto`).
 const FormularioCard = lazy(() => import('./FormularioCard'));
 const SeleccionCard = lazy(() => import('./SeleccionCard'));
 
@@ -65,8 +68,6 @@ function renderArtifact(
           conversacionId={ctx.conversacionId ?? 'unknown'}
         />
       );
-    case 'archivo_descargable':
-      return <ArchivoDescargableCard artefacto={artefacto} />;
     case 'formulario':
       return <FormularioCard artefacto={artefacto} />;
     case 'seleccion':

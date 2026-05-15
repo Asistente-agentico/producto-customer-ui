@@ -1,5 +1,13 @@
 # Ambigüedades a resolver antes de Fase 1 (PR 1 en adelante)
 
+> **🟢 ESTADO: RESUELTO (2026-05-14)** — las decisiones tomadas por el
+> equipo de diseño están en [`ambiguedades-resueltas.md`](ambiguedades-resueltas.md).
+> Este documento se mantiene como histórico de las preguntas formuladas.
+>
+> Además de las 10 ambigüedades originales, el equipo agregó **Q11
+> (política de salida de datos)** como regla firme inmutable del
+> producto. Ver el doc de respuestas.
+>
 > Documento dirigido al equipo de diseño (Claude Design) para resolver
 > antes de empezar la implementación de los PRs del handoff v2.0.
 >

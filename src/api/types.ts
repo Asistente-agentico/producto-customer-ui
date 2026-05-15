@@ -411,6 +411,19 @@ export const AccionPropuestaSchema = z
   })
   .passthrough();
 
+/**
+ * @deprecated Q11 · política de salida de datos (regla firme inmutable).
+ *
+ * El artefacto `archivo_descargable` queda **fuera** del catálogo de
+ * artefactos renderizables. El módulo Reportes es el único canal de
+ * salida de datos del Asistente al PC del usuario o a cualquier destino
+ * externo. Si un mensaje histórico trae este tipo, el dispatcher lo
+ * trata como `UnknownArtifactPlaceholder` (no se renderiza descarga).
+ *
+ * Se mantiene el schema export por si código legacy lo referencia, pero
+ * NO está en `KnownArtefactoSchema` (la discriminated union), por lo
+ * que nunca se renderiza con su componente original.
+ */
 export const ArchivoDescargableSchema = z
   .object({
     tipo: z.literal('archivo_descargable'),
@@ -477,7 +490,8 @@ export const KnownArtefactoSchema = z.discriminatedUnion('tipo', [
   BannerSchema,
   ProgresoSchema,
   AccionPropuestaSchema,
-  ArchivoDescargableSchema,
+  // Q11 · ArchivoDescargableSchema removido deliberadamente del catálogo
+  // renderizable. Si llega como artefacto, cae a UnknownArtifactPlaceholder.
   FormularioSchema,
   SeleccionSchema,
 ]);
