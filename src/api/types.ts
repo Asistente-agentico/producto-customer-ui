@@ -398,16 +398,25 @@ export const ProgresoSchema = z
   })
   .passthrough();
 
+// Schema v2 (Q4 + Q5 + Q11). El artefacto `accion_propuesta` que el
+// LLM emite en el chat es un STUB que navega a /acciones — la
+// confirmación, edición y ejecución viven en el módulo Acciones.
+//
+// Eliminados: `riesgo`, `requiere_confirmacion` (Q4).
+// Agregado: `permiso_requerido` para AGENTE_IA (RBAC visual).
+// `id_propuesta` ahora es también el `id` de la acción persistida
+// server-side; navegar a /acciones/:id_propuesta abre el detalle.
 export const AccionPropuestaSchema = z
   .object({
     tipo: z.literal('accion_propuesta'),
     version: z.literal(1),
-    tipo_accion: z.string(),
+    tipo_accion: z.enum(['ENVIAR_CORREO', 'AGENTE_IA']),
     id_propuesta: z.string(),
+    titulo: z.string().optional(),
+    sub: z.string().optional(),
     parametros: z.record(z.unknown()),
     permite_edicion: z.array(z.string()).default([]),
-    riesgo: z.enum(['bajo', 'medio', 'alto']),
-    requiere_confirmacion: z.boolean().default(true),
+    permiso_requerido: z.string().optional(),
   })
   .passthrough();
 
@@ -705,3 +714,63 @@ export const KpiUpdateEventSchema = z
   .passthrough();
 
 export type KpiUpdateEvent = z.infer<typeof KpiUpdateEventSchema>;
+
+// ---------------------------------------------------------------------------
+// Módulo Acciones — recurso persistido (PR 8 · handoff §3.7 + Q5/Q11)
+// ---------------------------------------------------------------------------
+
+export const ESTADOS_ACCION = ['pendiente', 'ejecutada', 'rechazada', 'fallida'] as const;
+export type EstadoAccion = (typeof ESTADOS_ACCION)[number];
+
+export const TIPOS_ACCION = ['ENVIAR_CORREO', 'AGENTE_IA'] as const;
+export type TipoAccion = (typeof TIPOS_ACCION)[number];
+
+export const AuditEntrySchema = z
+  .object({
+    ts: z.string(),
+    actor: z.string(),
+    accion: z.string(),
+    detalle: z.string().optional(),
+  })
+  .passthrough();
+
+export type AuditEntry = z.infer<typeof AuditEntrySchema>;
+
+export const AccionSchema = z
+  .object({
+    id: z.string(),
+    tipo: z.enum(TIPOS_ACCION),
+    titulo: z.string(),
+    sub: z.string().optional(),
+    estado: z.enum(ESTADOS_ACCION),
+    parametros: z.record(z.unknown()).default({}),
+    origen: z.string().optional(),
+    permiso_requerido: z.string().optional(),
+    audit: z.array(AuditEntrySchema).default([]),
+    creada_en: z.string(),
+    ejecutada_en: z.string().optional(),
+  })
+  .passthrough();
+
+export type Accion = z.infer<typeof AccionSchema>;
+
+export const AccionesListResponseSchema = z.object({
+  items: z.array(AccionSchema),
+});
+
+export type AccionesListResponse = z.infer<typeof AccionesListResponseSchema>;
+
+// Catálogo de agentes disponibles (handoff §3.7 · tab "Agente").
+// Configurado por tenant en el central; la UI lo filtra por permisos
+// del usuario para mostrar habilitados / no habilitados.
+export const AgenteCatalogoSchema = z
+  .object({
+    id: z.string(),
+    nombre: z.string(),
+    descripcion: z.string().optional(),
+    permiso_requerido: z.string(),
+    estimado: z.string().optional(),
+  })
+  .passthrough();
+
+export type AgenteCatalogo = z.infer<typeof AgenteCatalogoSchema>;

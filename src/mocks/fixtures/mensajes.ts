@@ -129,9 +129,13 @@ export const mensajeKpiFixture: MensajeResponseRaw = {
   ],
 };
 
+// Q4 + Q5 + Q11 · Stub minimal. Sin `riesgo`, sin `requiere_confirmacion`,
+// sin `adjuntos` (Q11 prohíbe adjuntos en correos). El usuario revisa
+// y ejecuta en /acciones/{id_propuesta}. Q5: el chat solo emite el stub.
 export const mensajeAccionFixture: MensajeResponseRaw = {
   mensaje_id: 'msg_demo_004',
-  respuesta: 'Preparé un correo con el resumen para que revises antes de enviarlo.',
+  respuesta:
+    'Preparé un correo institucional con el resumen. Revisalo en el módulo de Acciones antes de enviarlo.',
   blocked: false,
   error: null,
   metadata: { chunks_used: 5, scopes: ['mortalidad_cultivo'] },
@@ -141,14 +145,15 @@ export const mensajeAccionFixture: MensajeResponseRaw = {
       version: 1,
       tipo_accion: 'ENVIAR_CORREO',
       id_propuesta: 'act_abc123',
+      titulo: 'Notificar a Hugo Salinas',
+      sub: 'Jefe Centro CTR-007 · alza mortalidad + caída O₂',
       parametros: {
-        destinatario: 'gerencia@cliente.com',
-        asunto: 'Reporte de mortalidad — CTR-001',
-        cuerpo: 'Adjunto el resumen de mortalidad de los últimos 7 días.',
+        destinatario: 'hugo.salinas@empresa.cl',
+        asunto: 'CTR-007 jaula 4 · alza de mortalidad y caída O₂',
+        cuerpo:
+          'Hugo,\n\nDetectamos un alza sostenida de mortalidad en CTR-007 jaula 4 (27 u/d, +38% vs semana anterior) que correlaciona con caída de O₂ disuelto bajo 6.5 mg/L durante 72h. ¿Podemos coordinar revisión mañana AM?',
       },
       permite_edicion: ['destinatario', 'asunto', 'cuerpo'],
-      riesgo: 'medio',
-      requiere_confirmacion: true,
     },
   ],
 };
