@@ -86,9 +86,14 @@ export default function AsistenteBadge() {
             {caps.ui.logo_letras ?? 'AV'}
           </span>
         )}
-        <span className="tracking-tight font-medium">{activo.nombre}</span>
+        {/* Nombre + versión ocultos en mobile para no apretar la TopBar.
+            El emoji/iniciales bastan como identificador del asistente
+            activo; el dropdown sigue funcionando para cambiar. */}
+        <span className="hidden sm:inline tracking-tight font-medium">{activo.nombre}</span>
         {'version' in activo && typeof activo.version === 'string' && activo.version ? (
-          <span className={open ? 'text-cream/70' : 'text-ink3'}>· {activo.version}</span>
+          <span className={`hidden md:inline ${open ? 'text-cream/70' : 'text-ink3'}`}>
+            · {activo.version}
+          </span>
         ) : null}
         {otros.length > 0 ? <IconChevronDown size={10} aria-hidden="true" /> : null}
       </button>

@@ -80,12 +80,31 @@ export default function AccionesPage() {
       </header>
 
       <div className="flex-1 flex min-h-0">
-        <ColaLateral
-          items={items}
-          selectedId={selectedId}
-          onSelect={(id) => navigate(`/acciones/${id}`)}
-        />
-        <main className="flex-1 overflow-auto p-6 min-w-0">
+        {/* Mobile · si hay acción seleccionada, ocultamos la cola y
+            mostramos solo el detalle (botón "← Volver a la cola").
+            Desktop (md:) · ambas columnas visibles. */}
+        <div className={idFromUrl ? 'hidden md:block' : 'block w-full md:w-auto'}>
+          <ColaLateral
+            items={items}
+            selectedId={selectedId}
+            onSelect={(id) => navigate(`/acciones/${id}`)}
+          />
+        </div>
+        <main
+          className={[
+            'flex-1 overflow-auto min-w-0 p-4 md:p-6',
+            idFromUrl ? 'block' : 'hidden md:block',
+          ].join(' ')}
+        >
+          {idFromUrl ? (
+            <button
+              type="button"
+              onClick={() => navigate('/acciones')}
+              className="md:hidden mb-3 text-[12px] text-coral underline hover:opacity-80"
+            >
+              ← Volver a la cola
+            </button>
+          ) : null}
           {query.isLoading ? (
             <p className="text-sm text-ink2">Cargando...</p>
           ) : query.isError ? (
@@ -142,7 +161,7 @@ function ColaLateral({
   }, [items]);
 
   return (
-    <aside className="w-[320px] shrink-0 border-r border-rule overflow-auto bg-cream/30">
+    <aside className="w-full md:w-[320px] md:shrink-0 border-r border-rule overflow-auto bg-cream/30">
       {ORDEN_ESTADOS.map((estado) => {
         const list = porEstado[estado];
         if (list.length === 0) return null;

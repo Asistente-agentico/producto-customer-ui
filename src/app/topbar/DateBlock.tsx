@@ -15,7 +15,7 @@ export default function DateBlock() {
   const anio = d.getFullYear();
   return (
     <div
-      className="flex items-center gap-1.5 px-2 text-ink2 text-[12px]"
+      className="hidden sm:flex items-center gap-1.5 px-2 text-ink2 text-[12px]"
       aria-label={`Fecha de hoy: ${fecha} ${anio}`}
     >
       <IconCalendar size={12} className="text-ink3" aria-hidden="true" />
