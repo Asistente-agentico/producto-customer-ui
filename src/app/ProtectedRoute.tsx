@@ -3,6 +3,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/stores/auth';
 import { useCapabilities } from '@/stores/capabilities';
 import { useTranslation } from 'react-i18next';
+import Footer from './Footer';
 
 type Props = {
   children: ReactNode;
@@ -30,12 +31,17 @@ export default function ProtectedRoute({ children }: Props) {
   }, [status, capsStatus, loadCaps, i18n.language]);
 
   if (status === 'unknown' || status === 'verifying') {
+    // Bootstrap splash (PR 9 va a reemplazarlo por 7 checkmarks
+    // secuenciales). Por ahora un splash mínimo con Footer.
     return (
-      <main className="min-h-screen flex items-center justify-center">
-        <p className="opacity-70 text-sm" role="status" aria-live="polite">
-          {t('auth.verificando')}
-        </p>
-      </main>
+      <div className="min-h-screen flex flex-col bg-paper text-ink">
+        <main className="flex-1 flex items-center justify-center">
+          <p className="text-sm text-ink2" role="status" aria-live="polite">
+            {t('auth.verificando')}
+          </p>
+        </main>
+        <Footer />
+      </div>
     );
   }
 
