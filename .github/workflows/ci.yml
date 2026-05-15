@@ -86,7 +86,7 @@ jobs:
           docker rm -f ci-ui
 
       - name: Trivy vulnerability scan
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@0.36.0
         with:
           image-ref: producto-customer-ui:ci
           format: 'table'
