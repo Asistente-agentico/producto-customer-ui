@@ -2,22 +2,60 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ── Fuentes bundleadas (Q9 · variable fonts, sin CDN externo) ─────────── */
+@font-face {
+  font-family: 'Fraunces';
+  src:
+    url('/fonts/fraunces-vf.woff2') format('woff2-variations'),
+    url('/fonts/fraunces-vf.woff2') format('woff2');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src:
+    url('/fonts/plus-jakarta-sans-vf.woff2') format('woff2-variations'),
+    url('/fonts/plus-jakarta-sans-vf.woff2') format('woff2');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src:
+    url('/fonts/jetbrains-mono-vf.woff2') format('woff2-variations'),
+    url('/fonts/jetbrains-mono-vf.woff2') format('woff2');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 @layer base {
   :root {
-    /* Capa 1 (build-time) — defaults universales del producto.
-       Capa 3 (capabilities) los sobrescribe en runtime. */
-    --color-primary: #eaeaea;
-    --color-sidebar: #002c48;
-    --color-accent: #c96442;
-    --color-bg: #ffffff;
-    --color-text: #1a1a1a;
-  }
+    /* Q8 · Solo light mode. La paleta v2 (Q9 + Handoff §4) es la oficial.
+       capabilities.ui.colores la override en runtime via applyCapabilities. */
+    --color-navy: #0a2540;
+    --color-coral: #e85c3c;
+    --color-paper: #fafaf7;
+    --color-cream: #f2eedf;
+    --color-rule: #edeae0;
+    --color-ink: #0a0a0a;
+    --color-ink2: #5c5c5c;
+    --color-ink3: #9a958b;
+    --color-ok: #2d7d6f;
+    --color-warn: #b8860b;
+    --color-cream-band: #fffcf5;
 
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --color-bg: #1a1a1a;
-      --color-text: #eaeaea;
-    }
+    /* Aliases legacy v1 (mapeados desde la paleta v2 para no romper
+       componentes existentes que aún leen las CSS vars viejas). */
+    --color-primary: var(--color-paper);
+    --color-sidebar: var(--color-navy);
+    --color-accent: var(--color-coral);
+    --color-bg: var(--color-paper);
+    --color-text: var(--color-ink);
   }
 
   html,
@@ -28,9 +66,10 @@
 
   body {
     margin: 0;
-    background-color: var(--color-bg);
-    color: var(--color-text);
+    background-color: var(--color-paper);
+    color: var(--color-ink);
     font-family:
+      'Plus Jakarta Sans',
       system-ui,
       -apple-system,
       'Segoe UI',
@@ -41,7 +80,7 @@
   }
 
   *:focus-visible {
-    outline: 2px solid var(--color-accent);
+    outline: 2px solid var(--color-coral);
     outline-offset: 2px;
     border-radius: 2px;
   }
