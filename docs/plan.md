@@ -517,4 +517,66 @@ Una feature se considera completa cuando:
 
 ---
 
-**Implementación H0–H12 completa. Lista para integración con central V2.**
+## 11. Iteración v2.0 (handoff de Claude Design) — PR 0–11
+
+Tras la implementación inicial H0–H12 y la revisión del equipo de
+diseño, se aprobó un segundo ciclo de PRs para aplicar Look & Feel +
+ajustes al contrato (sin tocar la arquitectura técnica). Detalle en
+[`docs/diseno-v2/`](diseno-v2/) y decisiones en
+[`docs/diseno-v2/ambiguedades-resueltas.md`](diseno-v2/ambiguedades-resueltas.md)
+(Q1–Q11 incluyendo la política firme de salida de datos Q11).
+
+### PRs completados v2.0
+
+| PR | Cambio | Commit |
+|---|---|---|
+| 0 | Bump schema Capabilities (campos v2 opcionales, aliases v1) | `feat(pr-0)` |
+| 1 | Tailwind + 3 fuentes variables bundleadas + only-light (Q8/Q9) | `feat(pr-1)` |
+| 2 | Footer global "Powered by OPCiber" en login/bootstrap/shell | `feat(pr-2)` |
+| 3 | TopBar v2 con 9 sub-componentes + 2 stores nuevos | `feat(pr-3)` |
+| 4 | Sidebar jerárquico (ámbitos → semanas → temáticas) (Q1/Q2/Q6) | `feat(pr-4)` |
+| 5 | KpiBand colapsable con 4 charts SVG (Q3) | `feat(pr-5)` |
+| 6 | Mensajes del chat colapsables, composer paleta v2 | `feat(pr-6)` |
+| 7 | Reportes gerencia-aware con `formatos[]` por reporte (Q10/Q11) | `feat(pr-7)` |
+| 8 | Módulo Acciones · stub navegable + vista + composer (Q4/Q5/Q11) | `feat(pr-8)` |
+| 9 | LoginPage con cluster + BootstrapSplash con 7 checkmarks | `feat(pr-9)` |
+| 10 | Mobile polish · TopBar compacta + AccionesPage drawer | `feat(pr-10)` |
+| 11 | Axe tests v2 + cleanup final | `feat(pr-11)` |
+
+### Q11 — política firme inmutable
+
+**El módulo Reportes es el único canal de salida de datos** del
+Asistente al PC del usuario o cualquier destino externo. Implicaciones:
+- Eliminado el artefacto `archivo_descargable` del catálogo
+  renderizable (cae a placeholder por forward-compat).
+- Composer de correos del módulo Acciones **sin campo Adjuntos**
+  (oculto, no deshabilitado).
+- Backend (mock) valida: rechaza adjuntos[] en POST /acciones,
+  rechaza `from` distinto del `email_institucional` del JWT al
+  ejecutar.
+- **Envío de correos = responsabilidad EXCLUSIVA del módulo Acciones**.
+  El chat solo emite stubs navegables.
+
+### Métricas finales del v2.0
+
+- **126 tests** pasando entre unitarios, integración, axe y a11y.
+- **Bundle inicial**: ~150 KB gzipped (sin cambio vs v1).
+- **3 variable fonts bundleadas** (~100 KB en `public/fonts/`).
+- **Imagen Docker** sigue ~20 MB con Trivy clean en CI.
+- **CI**: typecheck + lint + format + test + build + audit + Trivy +
+  Docker smoke test.
+
+### Pendiente fuera del alcance de v2.0
+
+- Central V2 que implemente el contrato HTTP final (incluidos los
+  campos v2 de capabilities, los endpoints simplificados de acciones
+  y el endpoint `/reportes/:id/download?formato=...`).
+- Playwright e2e con axe (la infra de CI ya soporta el job).
+- Watermark dinámico en vistas sensibles (Q11.5 lo deja como
+  endurecimiento futuro tras estabilización).
+
+---
+
+**Implementación v2.0 (PR 0–11) cerrada. Lista para integración
+contra el central V2 — bastará con `USE_MOCKS=false` y un
+`BACKEND_URL_CENTRAL` apuntando al deployment real.**
