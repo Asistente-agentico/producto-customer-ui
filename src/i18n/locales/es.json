@@ -21,6 +21,20 @@
     "sesion_expirada": "Tu sesión expiró. Volvé a iniciar sesión.",
     "verificando": "Verificando sesión..."
   },
+  "login": {
+    "modulos_titulo": "Módulos del producto",
+    "modulos_nota": "Tu acceso a cada módulo se confirma tras iniciar sesión."
+  },
+  "bootstrap": {
+    "preparando": "Preparando tu asistente",
+    "paso_1": "Sesión autenticada",
+    "paso_2": "Configuración recibida",
+    "paso_3": "Marca del cliente aplicada",
+    "paso_4": "Permisos del usuario cargados",
+    "paso_5": "Módulos opcionales detectados",
+    "paso_6": "Conversaciones recuperadas",
+    "paso_7": "Asistente listo"
+  },
   "chat": {
     "input_placeholder": "Escribe tu consulta...",
     "enviar": "Enviar",

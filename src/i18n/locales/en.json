@@ -21,6 +21,20 @@
     "sesion_expirada": "Your session expired. Please sign in again.",
     "verificando": "Verifying session..."
   },
+  "login": {
+    "modulos_titulo": "Product modules",
+    "modulos_nota": "Your access to each module is confirmed after sign-in."
+  },
+  "bootstrap": {
+    "preparando": "Preparing your assistant",
+    "paso_1": "Session authenticated",
+    "paso_2": "Configuration received",
+    "paso_3": "Customer branding applied",
+    "paso_4": "User permissions loaded",
+    "paso_5": "Optional modules detected",
+    "paso_6": "Conversations recovered",
+    "paso_7": "Assistant ready"
+  },
   "chat": {
     "input_placeholder": "Type your question...",
     "enviar": "Send",

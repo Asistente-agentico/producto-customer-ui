@@ -3,8 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '@/stores/auth';
 import { redirectToIdp } from '@/api/auth';
-import { appConfig } from '@/lib/config';
+import { appConfig, appVersion } from '@/lib/config';
 import Footer from '@/app/Footer';
+import ModulosPreview from './ModulosPreview';
 
 export default function LoginPage() {
   const { t } = useTranslation();
@@ -36,7 +37,8 @@ export default function LoginPage() {
 
   if (idpMode) {
     return (
-      <div className="min-h-screen flex flex-col bg-paper text-ink">
+      <div className="relative min-h-screen flex flex-col bg-paper text-ink">
+        <VersionBadge />
         <main className="flex-1 flex items-center justify-center p-6">
           <section className="max-w-sm w-full text-center">
             <h1 className="font-display text-2xl font-semibold mb-4">{t('auth.iniciar_sesion')}</h1>
@@ -50,6 +52,7 @@ export default function LoginPage() {
             >
               {t('auth.iniciar_sesion')}
             </button>
+            <ModulosPreview />
           </section>
         </main>
         <Footer />
@@ -60,7 +63,8 @@ export default function LoginPage() {
   const busy = submitting || status === 'verifying';
 
   return (
-    <div className="min-h-screen flex flex-col bg-paper text-ink">
+    <div className="relative min-h-screen flex flex-col bg-paper text-ink">
+      <VersionBadge />
       <main className="flex-1 flex items-center justify-center p-6">
         <form
           onSubmit={handleSubmit}
@@ -110,9 +114,19 @@ export default function LoginPage() {
           >
             {busy ? t('comun.cargando') : t('auth.iniciar_sesion')}
           </button>
+
+          <ModulosPreview />
         </form>
       </main>
       <Footer />
+    </div>
+  );
+}
+
+function VersionBadge() {
+  return (
+    <div className="absolute top-3 right-3 text-[10px] font-mono text-ink3 tracking-wider uppercase">
+      v{appVersion}
     </div>
   );
 }
