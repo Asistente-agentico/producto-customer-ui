@@ -4,6 +4,7 @@ import Sidebar from './Sidebar';
 import Footer from './Footer';
 import { useCapabilities } from '@/stores/capabilities';
 import { useTranslation } from 'react-i18next';
+import KpiBand from '@/features/kpis/KpiBand';
 
 type Props = { children: ReactNode };
 
@@ -38,9 +39,10 @@ export default function AppLayout({ children }: Props) {
     <div className="min-h-screen flex flex-col bg-paper text-ink">
       <TopBar onToggleSidebar={() => setSidebarOpen((v) => !v)} hideMenuButton={degraded} />
 
-      {/* TODO PR 5 · KpiBand slot debajo de la TopBar.
-          Se renderiza solo cuando el toggle "KPI" del TopBar está ON
-          (estado global `kpiBandOpen`). Inicia OFF (Q3 + handoff §3.1). */}
+      {/* KpiBand · se renderiza solo cuando el toggle "KPI" del TopBar
+          está ON. Inicia OFF (Q3 + handoff §3.1). El propio KpiBand se
+          oculta si el módulo KPIs no está habilitado. */}
+      <KpiBand />
 
       {degraded ? (
         <div
