@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import { rawRequest } from './client';
 import { useCapabilities } from '@/stores/capabilities';
+import { ReportDefinitionSchema } from '@/features/reportes/reporte.types';
 
 /**
  * Schema Reporte v2 (Q10 · cada reporte declara sus formatos).
@@ -11,6 +12,13 @@ import { useCapabilities } from '@/stores/capabilities';
  *
  * `habilitado_para_usuario` viene resuelto por el central según RBAC.
  * `razon_bloqueo` se muestra como tooltip/badge cuando no habilitado.
+ *
+ * PR 1 · campos del ciclo de vida (state, urgent, version, creator_id,
+ * validator_id, approver_id, collaborators, frequency_code, coverage,
+ * definition, iterations, next_action_for, next_action_label,
+ * purge_in_days, stale, allowed_roles, approved_at, approved_by,
+ * created_at, last_activity_at) agregados como opcionales para
+ * compat hacia atrás con el central V1, que aún no los emite.
  */
 export const ReporteSchema = z
   .object({
@@ -28,6 +36,55 @@ export const ReporteSchema = z
     tipo: z.enum(['operativo', 'gerencial']).optional(),
     actualizado_en: z.string().optional(),
     tamano_bytes: z.number().optional(),
+    // PR 1 · ciclo de vida del reporte (US-02 a US-06).
+    state: z
+      .enum([
+        'borrador',
+        'esperando_datos',
+        'esperando_validacion',
+        'iterando',
+        'esperando_aprobacion',
+        'aprobado',
+        'publicado',
+        'cerrado',
+      ])
+      .optional(),
+    urgent: z.boolean().optional(),
+    version: z.number().optional(), // bloqueo optimista vía If-Match
+    creator_id: z.string().optional(),
+    validator_id: z.string().optional(),
+    approver_id: z.string().optional(),
+    collaborators: z
+      .array(
+        z
+          .object({
+            user_id: z.string(),
+            comment_count: z.number(),
+          })
+          .passthrough(),
+      )
+      .optional(),
+    frequency_code: z
+      .enum(['realtime', 'daily', 'weekly', 'biweekly', 'monthly', 'quarterly', 'on_demand'])
+      .optional(),
+    coverage: z
+      .object({
+        from: z.string(),
+        to: z.string(),
+      })
+      .passthrough()
+      .optional(),
+    definition: ReportDefinitionSchema.optional(),
+    iterations: z.number().optional(),
+    next_action_for: z.string().optional(),
+    next_action_label: z.string().optional(),
+    purge_in_days: z.number().nullable().optional(),
+    stale: z.boolean().optional(),
+    allowed_roles: z.array(z.string()).optional(),
+    approved_at: z.string().optional(),
+    approved_by: z.string().optional(),
+    created_at: z.string().optional(),
+    last_activity_at: z.string().optional(),
   })
   .passthrough();
 

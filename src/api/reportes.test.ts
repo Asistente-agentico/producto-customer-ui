@@ -63,6 +63,93 @@ describe('PR 7 · fetchCatalogo', () => {
   });
 });
 
+describe('m3 pr-1 · ReporteSchema con ciclo de vida', () => {
+  it('parsea una respuesta V2 con todos los campos del ciclo de vida', () => {
+    const v2 = {
+      id: 'r_001',
+      nombre: 'Margen consolidado',
+      formatos: ['xlsx', 'pdf'],
+      habilitado_para_usuario: true,
+      state: 'esperando_aprobacion' as const,
+      urgent: true,
+      version: 7,
+      creator_id: 'u_creator',
+      validator_id: 'u_validator',
+      approver_id: 'u_approver',
+      collaborators: [{ user_id: 'u_a', comment_count: 3 }],
+      frequency_code: 'weekly' as const,
+      coverage: { from: '2026-05-01', to: '2026-05-31' },
+      definition: {
+        filters: [{ field_id: 'fecha', op: 'gte', value: '2026-05-01' }],
+        rows: [{ field_id: 'centro', table_id: 'dim_centros' }],
+        cols: [{ field_id: 'semana', table_id: 'dim_tiempo' }],
+        values: [{ field_id: 'monto', agg: 'sum' }],
+      },
+      iterations: 2,
+      next_action_for: 'u_approver',
+      next_action_label: 'Aprobar',
+      purge_in_days: 14,
+      stale: false,
+      allowed_roles: ['analista', 'gerente'],
+      approved_at: '2026-05-15T10:00:00Z',
+      approved_by: 'u_approver',
+      created_at: '2026-05-10T08:00:00Z',
+      last_activity_at: '2026-05-15T10:00:00Z',
+    };
+    const parsed = ReporteSchema.parse(v2);
+    expect(parsed.state).toBe('esperando_aprobacion');
+    expect(parsed.urgent).toBe(true);
+    expect(parsed.version).toBe(7);
+    expect(parsed.collaborators).toHaveLength(1);
+    expect(parsed.collaborators?.[0]?.user_id).toBe('u_a');
+    expect(parsed.frequency_code).toBe('weekly');
+    expect(parsed.coverage).toEqual({ from: '2026-05-01', to: '2026-05-31' });
+    expect(parsed.definition?.filters).toHaveLength(1);
+    expect(parsed.definition?.values[0]?.agg).toBe('sum');
+    expect(parsed.purge_in_days).toBe(14);
+    expect(parsed.allowed_roles).toEqual(['analista', 'gerente']);
+  });
+
+  it('respeta defaults de definition: arrays vacíos cuando vienen omitidos', () => {
+    const parsed = ReporteSchema.parse({
+      id: 'r_002',
+      nombre: 'X',
+      definition: {},
+    });
+    expect(parsed.definition?.filters).toEqual([]);
+    expect(parsed.definition?.rows).toEqual([]);
+    expect(parsed.definition?.cols).toEqual([]);
+    expect(parsed.definition?.values).toEqual([]);
+  });
+
+  it('acepta `purge_in_days: null` (reporte sin caducidad)', () => {
+    const parsed = ReporteSchema.parse({
+      id: 'r_003',
+      nombre: 'X',
+      purge_in_days: null,
+    });
+    expect(parsed.purge_in_days).toBeNull();
+  });
+
+  it('rechaza un `state` fuera del enum', () => {
+    const result = ReporteSchema.safeParse({
+      id: 'r_004',
+      nombre: 'X',
+      state: 'estado_inexistente',
+    });
+    expect(result.success).toBe(false);
+  });
+
+  it('rechaza un `frequency_code` fuera del enum', () => {
+    const result = ReporteSchema.safeParse({
+      id: 'r_005',
+      nombre: 'X',
+      frequency_code: 'anual',
+    });
+    expect(result.success).toBe(false);
+  });
+});
+
 describe('PR 7 · descargarReporte', () => {
   it('usa endpoint /download con query param formato', async () => {
     let calledUrl = '';
