@@ -64,11 +64,17 @@ export const router = createBrowserRouter([
       { path: 'on-line', element: <DashboardPage /> },
       { path: 'dashboard', element: <DashboardPage /> },
       { path: 'reportes', element: <ReportesPage /> },
-      // PR 4 · stub Designer. La protección por permiso `crear_reporte`
-      // se agrega en PR 3 cuando se extienda ProtectedRoute con
-      // requirePerm. Por ahora la visibilidad del bridge en el catálogo
-      // ya gatea por permiso; un usuario que tipee la URL llega al stub.
-      { path: 'reportes/crear', element: <ReportesDesignerPage /> },
+      // PR 3 · ruta protegida por permiso. Sin `crear_reporte` el usuario
+      // es redirigido a /reportes con un evento `permission_denied` en
+      // el audit log.
+      {
+        path: 'reportes/crear',
+        element: (
+          <ProtectedRoute requirePerm="crear_reporte" denyRedirectTo="/reportes">
+            <ReportesDesignerPage />
+          </ProtectedRoute>
+        ),
+      },
       { path: 'acciones', element: <AccionesPage /> },
       { path: 'acciones/:id', element: <AccionesPage /> },
       { path: 'configuracion', element: <ConfiguracionPage /> },
