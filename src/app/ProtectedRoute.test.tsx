@@ -119,7 +119,7 @@ describe('ProtectedRoute · requirePerm (m3 pr-3)', () => {
     expect(mockedAuditEvent).toHaveBeenCalledWith({
       evento: 'permission_denied',
       recurso: '/protegida',
-      metadata: { required: ['crear_reporte'], denegados: ['crear_reporte'] },
+      metadata: { required: ['crear_reporte'], denegados: ['crear_reporte'], match: 'all' },
     });
   });
 
@@ -149,7 +149,49 @@ describe('ProtectedRoute · requirePerm (m3 pr-3)', () => {
     expect(mockedAuditEvent).toHaveBeenCalledWith({
       evento: 'permission_denied',
       recurso: '/protegida',
-      metadata: { required: ['perm_a', 'perm_b'], denegados: ['perm_b'] },
+      metadata: { required: ['perm_a', 'perm_b'], denegados: ['perm_b'], match: 'all' },
+    });
+  });
+
+  it('con `permMatch="any"` y al menos uno presente, renderiza children', async () => {
+    setupAuthenticated(['perm_b']);
+    wrap(
+      <ProtectedRoute
+        requirePerm={['perm_a', 'perm_b', 'perm_c']}
+        permMatch="any"
+        denyRedirectTo="/fallback"
+      >
+        <div data-testid="contenido-protegido">ok</div>
+      </ProtectedRoute>,
+    );
+    expect(await screen.findByTestId('contenido-protegido')).toBeInTheDocument();
+    expect(mockedAuditEvent).not.toHaveBeenCalled();
+  });
+
+  it('con `permMatch="any"` y ninguno presente, redirige + audita con match=any', async () => {
+    setupAuthenticated(['otro_perm']);
+    wrap(
+      <ProtectedRoute
+        requirePerm={['perm_a', 'perm_b']}
+        permMatch="any"
+        denyRedirectTo="/fallback"
+      >
+        <div data-testid="contenido-protegido">ok</div>
+      </ProtectedRoute>,
+    );
+
+    expect(await screen.findByTestId('fallback-route')).toBeInTheDocument();
+    expect(screen.queryByTestId('contenido-protegido')).not.toBeInTheDocument();
+
+    await waitFor(() => expect(mockedAuditEvent).toHaveBeenCalledTimes(1));
+    expect(mockedAuditEvent).toHaveBeenCalledWith({
+      evento: 'permission_denied',
+      recurso: '/protegida',
+      metadata: {
+        required: ['perm_a', 'perm_b'],
+        denegados: ['perm_a', 'perm_b'],
+        match: 'any',
+      },
     });
   });
 

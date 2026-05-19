@@ -16,6 +16,8 @@ const ReportesPage = lazy(() => import('@/features/reportes/ReportesPage'));
 const ReportesDesignerPage = lazy(
   () => import('@/features/reportes/ReportesDesignerPage'),
 );
+const ReporteInboxPage = lazy(() => import('@/features/reportes/ReporteInboxPage'));
+const ReporteDetailPage = lazy(() => import('@/features/reportes/ReporteDetailPage'));
 const ConfiguracionPage = lazy(() => import('@/features/configuracion/ConfiguracionPage'));
 const AccionesPage = lazy(() => import('@/features/acciones/AccionesPage'));
 
@@ -75,6 +77,24 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      // PR 5 · bandeja contextual del usuario (US-02). Accesible si tiene
+      // CUALQUIERA de los 3 permisos del ciclo de vida (OR semantics).
+      {
+        path: 'reportes/inbox',
+        element: (
+          <ProtectedRoute
+            requirePerm={['crear_reporte', 'validar_reporte', 'aprobar_reporte']}
+            permMatch="any"
+            denyRedirectTo="/reportes"
+          >
+            <ReporteInboxPage />
+          </ProtectedRoute>
+        ),
+      },
+      // PR 5 · stub del detalle (PR 7 implementa el contenido real).
+      // Sin gating por permiso: cualquier usuario autenticado puede
+      // abrir el detalle de un reporte que ya está en su bandeja.
+      { path: 'reportes/:id', element: <ReporteDetailPage /> },
       { path: 'acciones', element: <AccionesPage /> },
       { path: 'acciones/:id', element: <AccionesPage /> },
       { path: 'configuracion', element: <ConfiguracionPage /> },

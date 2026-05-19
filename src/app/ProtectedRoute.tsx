@@ -12,10 +12,13 @@ type Props = {
   children: ReactNode;
   // PR 3 · gating opcional por permiso. Si se omite, el componente
   // solo valida auth + bootstrap. Si se incluye y el usuario no tiene
-  // el/los permisos requeridos (AND semantics para arrays), redirige
-  // a `denyRedirectTo` (default '/') y dispara `permission_denied`
-  // al audit log.
+  // el/los permisos requeridos, redirige a `denyRedirectTo` (default '/')
+  // y dispara `permission_denied` al audit log.
   requirePerm?: string | string[];
+  // PR 5 · semántica del array. 'all' (default, PR 3) exige TODOS los
+  // permisos; 'any' exige AL MENOS UNO. Sin efecto si requirePerm es
+  // un string.
+  permMatch?: 'all' | 'any';
   denyRedirectTo?: string;
 };
 
@@ -31,7 +34,12 @@ type Props = {
  * 5. `caps.status === 'ready'` y todos los pasos done → children.
  * 6. `caps.status === 'degraded'` → children con banner (AppLayout lo maneja).
  */
-export default function ProtectedRoute({ children, requirePerm, denyRedirectTo }: Props) {
+export default function ProtectedRoute({
+  children,
+  requirePerm,
+  permMatch,
+  denyRedirectTo,
+}: Props) {
   const { t, i18n } = useTranslation();
   const status = useAuth((s) => s.status);
   const bootstrap = useAuth((s) => s.bootstrap);
@@ -80,16 +88,21 @@ export default function ProtectedRoute({ children, requirePerm, denyRedirectTo }
   }
 
   // PR 3 · gating por permiso. Se evalúa después de auth + bootstrap
-  // para garantizar que `caps` esté cargado. AND semantics si es array.
+  // para garantizar que `caps` esté cargado.
+  // PR 5 · `permMatch` controla semántica del array: 'all' (default,
+  // exige todos) o 'any' (al menos uno).
   if (requirePerm) {
     const userPerms = caps?.usuario.permisos ?? [];
     const required = Array.isArray(requirePerm) ? requirePerm : [requirePerm];
     const denegados = required.filter((p) => !userPerms.includes(p));
-    if (denegados.length > 0) {
+    const match = permMatch ?? 'all';
+    const denied =
+      match === 'any' ? denegados.length === required.length : denegados.length > 0;
+    if (denied) {
       void auditEvent({
         evento: 'permission_denied',
         recurso: location.pathname,
-        metadata: { required, denegados },
+        metadata: { required, denegados, match },
       });
       // TODO: cuando exista sistema de toasts en el repo, mostrar
       // notificación "Necesitás el permiso X para acceder a esta vista".
