@@ -1,7 +1,8 @@
 import { useMemo, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
-import { IconDownload, IconFile, IconLock, IconCheck } from '@tabler/icons-react';
+import { Link } from 'react-router-dom';
+import { IconDownload, IconFile, IconLock, IconCheck, IconPlus } from '@tabler/icons-react';
 import { descargarReporte, fetchCatalogo, type Reporte } from '@/api/reportes';
 import { useCapabilities } from '@/stores/capabilities';
 import { auditEvent } from '@/api/audit';
@@ -35,6 +36,7 @@ export default function ReportesPage() {
   const caps = useCapabilities((s) => s.capabilities);
   const reportesEnabled = caps?.modulos.reportes?.enabled === true;
   const gerencia = caps?.usuario.gerencia ?? '';
+  const puedeCrear = caps?.usuario.permisos?.includes('crear_reporte') ?? false;
   const [filtro, setFiltro] = useState<Filtro>('todos');
 
   const query = useQuery({
@@ -80,7 +82,18 @@ export default function ReportesPage() {
         <p className="text-sm text-ink2 mt-1">Catálogo de reportes pre acordados.</p>
       </header>
 
-      <FiltroSegmentado filtro={filtro} setFiltro={setFiltro} contadores={contadores} />
+      <div className="flex items-center justify-between gap-3 flex-wrap">
+        <FiltroSegmentado filtro={filtro} setFiltro={setFiltro} contadores={contadores} />
+        {puedeCrear ? (
+          <Link
+            to="/reportes/crear"
+            className="h-9 inline-flex items-center gap-2 px-3 rounded-md bg-coral text-paper text-[12.5px] font-medium tracking-tight hover:opacity-90 transition-opacity"
+          >
+            <IconPlus size={13} stroke={2} aria-hidden="true" />
+            Crear reporte
+          </Link>
+        ) : null}
+      </div>
 
       {query.isLoading ? (
         <p className="opacity-60 text-sm">{t('comun.cargando')}</p>

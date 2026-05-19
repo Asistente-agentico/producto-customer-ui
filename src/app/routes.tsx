@@ -13,6 +13,9 @@ const LoginPage = lazy(() => import('@/features/auth/LoginPage'));
 const ChatPage = lazy(() => import('@/features/chat/ChatPage'));
 const DashboardPage = lazy(() => import('@/features/kpis/DashboardPage'));
 const ReportesPage = lazy(() => import('@/features/reportes/ReportesPage'));
+const ReportesDesignerPage = lazy(
+  () => import('@/features/reportes/ReportesDesignerPage'),
+);
 const ConfiguracionPage = lazy(() => import('@/features/configuracion/ConfiguracionPage'));
 const AccionesPage = lazy(() => import('@/features/acciones/AccionesPage'));
 
@@ -61,6 +64,11 @@ export const router = createBrowserRouter([
       { path: 'on-line', element: <DashboardPage /> },
       { path: 'dashboard', element: <DashboardPage /> },
       { path: 'reportes', element: <ReportesPage /> },
+      // PR 4 · stub Designer. La protección por permiso `crear_reporte`
+      // se agrega en PR 3 cuando se extienda ProtectedRoute con
+      // requirePerm. Por ahora la visibilidad del bridge en el catálogo
+      // ya gatea por permiso; un usuario que tipee la URL llega al stub.
+      { path: 'reportes/crear', element: <ReportesDesignerPage /> },
       { path: 'acciones', element: <AccionesPage /> },
       { path: 'acciones/:id', element: <AccionesPage /> },
       { path: 'configuracion', element: <ConfiguracionPage /> },
