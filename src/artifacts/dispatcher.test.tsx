@@ -34,16 +34,16 @@ describe('ArtefactDispatcher', () => {
     const a: Artefacto = {
       tipo: 'tabla',
       version: 1,
-      titulo: 'Centros',
+      titulo: 'Líneas',
       columnas: [
-        { id: 'centro_id', label: 'Centro', tipo: 'string' },
-        { id: 'biomasa', label: 'Biomasa', tipo: 'number' },
+        { id: 'linea_id', label: 'Línea', tipo: 'string' },
+        { id: 'volumen', label: 'Volumen', tipo: 'number' },
       ],
-      filas: [{ centro_id: 'CTR-001', biomasa: 850 }],
+      filas: [{ linea_id: 'LIN-001', volumen: 850 }],
     };
     wrap(<ArtefactDispatcher artefacto={a} />);
-    expect(await screen.findByText('Centros')).toBeInTheDocument();
-    expect(screen.getByText('CTR-001')).toBeInTheDocument();
+    expect(await screen.findByText('Líneas')).toBeInTheDocument();
+    expect(screen.getByText('LIN-001')).toBeInTheDocument();
   });
 
   it('renderiza KPI bloqueado con mensaje', async () => {

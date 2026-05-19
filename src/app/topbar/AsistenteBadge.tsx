@@ -6,8 +6,10 @@ import { actualizarPreferencias } from '@/api/usuario';
 /**
  * Badge del asistente activo + dropdown para cambiar (Q6).
  *
- * Muestra `🐟 Engorda · v2.4.1`. Click abre dropdown con los otros
- * asistentes autorizados (`capabilities.ui.asistentes[]`). Cambiar →
+ * Muestra `<emoji> <Nombre> · <version>`. El emoji viene de
+ * `capabilities.ui.icono_emoji` (configurable por tenant). Click abre
+ * dropdown con los otros asistentes autorizados
+ * (`capabilities.ui.asistentes[]`). Cambiar →
  * `PATCH /usuario/preferencias { asistente_activo_id }` + refetch de
  * capabilities (lo trigger el cambio del header `X-Capabilities-Version`
  * en una próxima respuesta, o vía `refresh()`).

@@ -39,7 +39,7 @@ describe('PR 7 · ReporteSchema v2', () => {
   it('parsea un reporte con formatos[] (sin formato legacy)', () => {
     const r = ReporteSchema.parse({
       id: 'r1',
-      nombre: 'Mortalidad mensual',
+      nombre: 'Defectos mensuales',
       gerencia: 'Operaciones',
       formatos: ['xlsx', 'pdf'],
       habilitado_para_usuario: true,

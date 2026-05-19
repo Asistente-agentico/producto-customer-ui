@@ -12,9 +12,9 @@ const REPORTES_BASE = 'http://localhost:8081';
  */
 const catalogo = [
   {
-    id: 'mortalidad_mensual',
-    nombre: 'Mortalidad mensual por centro',
-    descripcion: 'Resumen consolidado de mortalidad por centro de cultivo.',
+    id: 'defectos_mensual',
+    nombre: 'Defectos mensuales por línea',
+    descripcion: 'Resumen consolidado de defectos por línea de producción.',
     gerencia: 'Operaciones',
     formatos: ['xlsx', 'pdf'],
     habilitado_para_usuario: true,
@@ -24,9 +24,9 @@ const catalogo = [
     actualizado_en: '2026-05-13T03:00:00Z',
   },
   {
-    id: 'biomasa_diaria',
-    nombre: 'Biomasa diaria',
-    descripcion: 'Datos crudos de biomasa para análisis offline.',
+    id: 'volumen_diario',
+    nombre: 'Volumen diario',
+    descripcion: 'Datos crudos de volumen para análisis offline.',
     gerencia: 'Operaciones',
     formatos: ['xlsx', 'pdf', 'pbi'],
     habilitado_para_usuario: true,
@@ -36,9 +36,9 @@ const catalogo = [
     actualizado_en: '2026-05-13T03:05:00Z',
   },
   {
-    id: 'fcr_semanal',
-    nombre: 'FCR consolidado semanal',
-    descripcion: 'Eficiencia alimenticia por centro y semana, con tendencias.',
+    id: 'ratio_semanal',
+    nombre: 'Ratio insumo/salida consolidado semanal',
+    descripcion: 'Eficiencia productiva por línea y semana, con tendencias.',
     gerencia: 'Operaciones',
     formatos: ['xlsx', 'pptx'],
     habilitado_para_usuario: true,
@@ -63,7 +63,7 @@ const catalogo = [
   {
     id: 'gastos_operacionales',
     nombre: 'Gastos operacionales consolidados',
-    descripcion: 'Detalle de gastos por centro de costo.',
+    descripcion: 'Detalle de gastos por línea de costo.',
     gerencia: 'Finanzas',
     formatos: ['xlsx', 'pdf'],
     habilitado_para_usuario: false,

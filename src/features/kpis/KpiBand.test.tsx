@@ -65,7 +65,7 @@ describe('KpiBand · PR 5', () => {
     await setupCapsReady();
     useUiToggles.getState().setKpiBand(true);
     render(<KpiBand />);
-    const btn = findTileButton(/Mortalidad diaria/i);
+    const btn = findTileButton(/Defectos diarios/i);
     fireEvent.click(btn);
     expect(btn).toHaveAttribute('aria-pressed', 'true');
     // Stat "acumulado 14d" aparece (del fixture).
@@ -76,10 +76,10 @@ describe('KpiBand · PR 5', () => {
     await setupCapsReady();
     useUiToggles.getState().setKpiBand(true);
     render(<KpiBand />);
-    fireEvent.click(findTileButton(/Mortalidad diaria/i));
-    fireEvent.click(findTileButton(/O₂ disuelto/i));
-    expect(findTileButton(/Mortalidad diaria/i)).toHaveAttribute('aria-pressed', 'true');
-    expect(findTileButton(/O₂ disuelto/i)).toHaveAttribute('aria-pressed', 'true');
+    fireEvent.click(findTileButton(/Defectos diarios/i));
+    fireEvent.click(findTileButton(/Parámetro crítico/i));
+    expect(findTileButton(/Defectos diarios/i)).toHaveAttribute('aria-pressed', 'true');
+    expect(findTileButton(/Parámetro crítico/i)).toHaveAttribute('aria-pressed', 'true');
   });
 
   it('botón ✕ cierra la banda (sincroniza con TopBar toggle)', async () => {
@@ -94,7 +94,7 @@ describe('KpiBand · PR 5', () => {
   it('SSE override · si llega valor live, prefiere ese sobre el snapshot', async () => {
     await setupCapsReady();
     useUiToggles.getState().setKpiBand(true);
-    useKpis.getState().apply({ kpi_id: 'mort', valor: '99 u/d' });
+    useKpis.getState().apply({ kpi_id: 'def', valor: '99 u/d' });
     render(<KpiBand />);
     expect(screen.getByText('99 u/d')).toBeInTheDocument();
     // El valor del fixture "27 u/d" ya no aparece.

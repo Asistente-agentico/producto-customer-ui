@@ -6,8 +6,8 @@ import { detectAmbito } from '@/lib/ambitos';
 
 const base = appConfig.BACKEND_URL_CENTRAL;
 
-const AMBITOS_AUTORIZADOS = ['mortalidad', 'calidad_agua', 'productividad'];
-const DEFAULT_ASISTENTE = 'engorda';
+const AMBITOS_AUTORIZADOS = ['defectos', 'calidad_proceso', 'produccion'];
+const DEFAULT_ASISTENTE = 'produccion';
 
 // Helpers para semanas pasadas en demo (sidebar muestra hasta 4 semanas).
 function diasAtras(n: number): string {
@@ -23,9 +23,9 @@ const conversaciones = new Map<string, ConversacionListItem>([
     'conv_demo_001',
     {
       id: 'conv_demo_001',
-      titulo: 'Mortalidad última semana en CTR-007',
-      asistente_id: 'engorda',
-      ambito_id: 'mortalidad',
+      titulo: 'Defectos última semana en LIN-007',
+      asistente_id: 'produccion',
+      ambito_id: 'defectos',
       creado_en: diasAtras(1),
       actualizado_en: diasAtras(0),
     },
@@ -34,9 +34,9 @@ const conversaciones = new Map<string, ConversacionListItem>([
     'conv_demo_002',
     {
       id: 'conv_demo_002',
-      titulo: 'O₂ disuelto bajo umbral · CTR-003',
-      asistente_id: 'engorda',
-      ambito_id: 'calidad_agua',
+      titulo: 'Parámetro crítico bajo umbral · LIN-003',
+      asistente_id: 'produccion',
+      ambito_id: 'calidad_proceso',
       creado_en: diasAtras(3),
       actualizado_en: diasAtras(2),
     },
@@ -45,9 +45,9 @@ const conversaciones = new Map<string, ConversacionListItem>([
     'conv_demo_003',
     {
       id: 'conv_demo_003',
-      titulo: 'FCR semana 18 vs semana 17',
-      asistente_id: 'engorda',
-      ambito_id: 'productividad',
+      titulo: 'Ratio insumo/salida semana 18 vs semana 17',
+      asistente_id: 'produccion',
+      ambito_id: 'produccion',
       creado_en: diasAtras(9),
       actualizado_en: diasAtras(9),
     },
@@ -56,9 +56,9 @@ const conversaciones = new Map<string, ConversacionListItem>([
     'conv_demo_004',
     {
       id: 'conv_demo_004',
-      titulo: 'Biomasa proyectada Q3',
-      asistente_id: 'engorda',
-      ambito_id: 'productividad',
+      titulo: 'Volumen proyectado Q3',
+      asistente_id: 'produccion',
+      ambito_id: 'produccion',
       creado_en: diasAtras(15),
       actualizado_en: diasAtras(15),
     },
@@ -67,9 +67,9 @@ const conversaciones = new Map<string, ConversacionListItem>([
     'conv_demo_005',
     {
       id: 'conv_demo_005',
-      titulo: 'Brote sospechoso CTR-001',
-      asistente_id: 'engorda',
-      ambito_id: 'mortalidad',
+      titulo: 'Falla masiva sospechosa LIN-001',
+      asistente_id: 'produccion',
+      ambito_id: 'defectos',
       creado_en: diasAtras(22),
       actualizado_en: diasAtras(22),
     },
@@ -80,8 +80,8 @@ const mensajesPorConv = new Map<string, MensajeHistorialRaw[]>([
   [
     'conv_demo_001',
     [
-      { rol: 'user', texto: 'Mortalidad última semana en CTR-007', ts: diasAtras(1) },
-      { rol: 'assistant', ts: diasAtras(1), respuesta: pickMensajeMock('mortalidad') },
+      { rol: 'user', texto: 'Defectos última semana en LIN-007', ts: diasAtras(1) },
+      { rol: 'assistant', ts: diasAtras(1), respuesta: pickMensajeMock('defectos') },
     ],
   ],
 ]);
@@ -177,7 +177,7 @@ export const conversacionesHandlers = [
   }),
 
   http.post(`${base}/conversaciones/:convId/mensajes/:msgId/refresh-grafico`, async () => {
-    const fresh = pickMensajeMock('mortalidad');
+    const fresh = pickMensajeMock('defectos');
     return HttpResponse.json(fresh);
   }),
 ];

@@ -1,5 +1,6 @@
 // Fixture realista de /capabilities para desarrollo y tests.
-// Dominio genérico con ejemplos de salmonera (A1 del plan).
+// Dominio genérico (control de producción / inventario / calidad)
+// según restricción Illari §2.9.
 // PR 0: enriquecido con campos del handoff v2.0 (paleta nueva,
 // asistente_activo, filtros_jwt, bloqueados, ambitos_autorizados, etc.).
 
@@ -10,19 +11,19 @@ export const capabilitiesFixture: Capabilities = {
   hash: 'cap_dev_0001',
   tenant: {
     id: 'tenant_demo',
-    nombre: 'Demo Salmonera',
+    nombre: 'Demo Industria',
     expira: '2027-01-01T00:00:00Z',
-    dominio: 'demo-salmonera.cl',
-    region: 'Región X · Los Lagos',
+    dominio: 'industria-demo.cl',
+    region: 'Región X · Centro',
   },
   usuario: {
     id_pseudo: 'u_a1b2c3d4',
     nombre: 'Matías Vergara',
     iniciales: 'MV',
-    rol: 'Jefe de Centro',
-    rol_id: 'jefe_centro',
+    rol: 'Líder de Línea',
+    rol_id: 'lider_linea',
     gerencia: 'Operaciones',
-    email_institucional: 'matias.vergara@demo-salmonera.cl',
+    email_institucional: 'matias.vergara@industria-demo.cl',
     idioma: 'es',
     permisos: [
       'consultar',
@@ -35,7 +36,7 @@ export const capabilitiesFixture: Capabilities = {
     filtros_jwt: [
       { campo: 'gerencia', valor: 'Operaciones', aplica_a: 'todos los chunks' },
       { campo: 'region', valor: 'Región X', aplica_a: 'datos geográficos' },
-      { campo: 'centros', valor: 'CTR-001, CTR-003, CTR-007', aplica_a: 'series por centro' },
+      { campo: 'lineas', valor: 'LIN-001, LIN-003, LIN-007', aplica_a: 'series por línea' },
       { campo: 'pii_visible', valor: 'no', aplica_a: 'datos de personas' },
     ],
     bloqueados: [
@@ -45,13 +46,13 @@ export const capabilitiesFixture: Capabilities = {
     ],
     kpis_configurados: [
       {
-        id: 'mort',
-        label: 'Mortalidad diaria',
+        id: 'def',
+        label: 'Defectos diarios',
         value: '27 u/d',
         delta: '+38%',
         severity: 'bad',
         chart: 'line',
-        subtitle: 'CTR-007 · 14 días',
+        subtitle: 'LIN-007 · 14 días',
         series: [11, 12, 10, 9, 13, 12, 14, 17, 21, 26, 24, 19, 22, 27],
         target: { lo: 8, hi: 14, label: 'zona objetivo' },
         stats: [
@@ -61,13 +62,13 @@ export const capabilitiesFixture: Capabilities = {
         ],
       },
       {
-        id: 'o2',
-        label: 'O₂ disuelto',
+        id: 'param',
+        label: 'Parámetro crítico',
         value: '6.2 mg/L',
         delta: '−18%',
         severity: 'warn',
         chart: 'line',
-        subtitle: 'CTR-007 jaula 4 · 7d',
+        subtitle: 'LIN-007 máquina 4 · 7d',
         series: [7.4, 7.2, 7.0, 6.8, 6.6, 6.3, 6.2],
         target: { lo: 6.5, hi: 8.5, label: 'rango óptimo' },
         stats: [
@@ -77,28 +78,28 @@ export const capabilitiesFixture: Capabilities = {
         ],
       },
       {
-        id: 'biomasa',
-        label: 'Biomasa total',
+        id: 'volumen',
+        label: 'Volumen total',
         value: '2.450 t',
         delta: '+6.5%',
         severity: 'ok',
         chart: 'bar',
         subtitle: 'meta Q2 · 2.300 t',
         bars: [
-          ['CTR-001', 820, 800],
-          ['CTR-003', 610, 600],
-          ['CTR-007', 412, 600],
-          ['CTR-012', 608, 600],
+          ['LIN-001', 820, 800],
+          ['LIN-003', 610, 600],
+          ['LIN-007', 412, 600],
+          ['LIN-012', 608, 600],
         ],
         stats: [
           ['cumplimiento', '106%'],
-          ['mejor centro', 'CTR-001'],
-          ['rezagado', 'CTR-007'],
+          ['mejor línea', 'LIN-001'],
+          ['rezagado', 'LIN-007'],
         ],
       },
       {
-        id: 'fcr',
-        label: 'FCR consolidado',
+        id: 'ratio',
+        label: 'Ratio insumo/salida',
         value: '1.34',
         delta: '−0.03',
         severity: 'ok',
@@ -111,12 +112,12 @@ export const capabilitiesFixture: Capabilities = {
         stats: [
           ['semana 18', '1.37'],
           ['semana 17', '1.39'],
-          ['mejor centro', 'CTR-001 1.31'],
+          ['mejor línea', 'LIN-001 1.31'],
         ],
       },
       {
         id: 'peso',
-        label: 'Peso medio',
+        label: 'Peso promedio',
         value: '4.21 kg',
         delta: '+50 g',
         severity: 'warn',
@@ -126,7 +127,7 @@ export const capabilitiesFixture: Capabilities = {
         stats: [
           ['ganancia sem', '+50 g'],
           ['vs ciclo ant', '+6%'],
-          ['días a cosecha', '~28'],
+          ['días a cierre', '~28'],
         ],
       },
     ],
@@ -149,8 +150,8 @@ export const capabilitiesFixture: Capabilities = {
     titulo: 'Asistentes Virtuales',
     subtitulo: 'Sistema integrado de gestión productiva',
     icono_sistema: 'AV',
-    icono_emoji: '🐟',
-    logo_letras: 'SA',
+    icono_emoji: '📊',
+    logo_letras: 'DI',
     colores: {
       // Paleta v2.0 (preferida por applyCapabilities).
       navy: '#0A2540',
@@ -174,30 +175,30 @@ export const capabilitiesFixture: Capabilities = {
     flags: { autorenombrar_ambito_al_primer_mensaje: true },
     asistentes: [
       {
-        id: 'engorda',
-        nombre: 'Engorda',
-        subtitulo: 'Centros y jaulas · ciclo productivo',
-        ambitos: ['centros_cultivo', 'mortalidad_cultivo'],
+        id: 'produccion',
+        nombre: 'Producción',
+        subtitulo: 'Líneas y máquinas · ciclo productivo',
+        ambitos: ['lineas_produccion', 'control_defectos'],
         disabled: false,
       },
       {
-        id: 'cosecha',
-        nombre: 'Cosecha',
+        id: 'cierre_lote',
+        nombre: 'Cierre de lote',
         subtitulo: 'Planta y logística',
-        ambitos: ['cosecha', 'planta'],
+        ambitos: ['cierre_lote', 'planta'],
         disabled: false,
       },
     ],
     consultas_sugeridas: {
-      centros_cultivo: ['¿Cómo está el {entidad}?', 'Mortalidad última semana en {entidad}'],
-      mortalidad_cultivo: ['¿Qué causó el aumento de mortalidad en {entidad}?'],
+      lineas_produccion: ['¿Cómo está la {entidad}?', 'Defectos última semana en {entidad}'],
+      control_defectos: ['¿Qué causó el aumento de defectos en {entidad}?'],
     },
     entidades_principales: [
       {
-        nombre: 'Centro de Cultivo',
-        identificador: 'centro_id',
-        regex: '\\bCTR-\\d{3}\\b',
-        prefijo_display: 'Centro',
+        nombre: 'Línea de Producción',
+        identificador: 'linea_id',
+        regex: '\\bLIN-\\d{3}\\b',
+        prefijo_display: 'Línea',
       },
     ],
   },
@@ -207,14 +208,14 @@ export const capabilitiesFixture: Capabilities = {
     features: ['function_calling', 'long_context'],
   },
   asistente_activo: {
-    id: 'engorda',
-    nombre: 'Engorda',
-    subtitulo: 'Centros y jaulas · ciclo productivo',
+    id: 'produccion',
+    nombre: 'Producción',
+    subtitulo: 'Líneas y máquinas · ciclo productivo',
     version: 'v2.4.1',
   },
   ambitos_autorizados: [
-    { id: 'mortalidad', nombre: 'Mortalidad' },
-    { id: 'calidad_agua', nombre: 'Calidad de agua' },
-    { id: 'productividad', nombre: 'Productividad' },
+    { id: 'defectos', nombre: 'Defectos' },
+    { id: 'calidad_proceso', nombre: 'Calidad de proceso' },
+    { id: 'produccion', nombre: 'Producción' },
   ],
 };

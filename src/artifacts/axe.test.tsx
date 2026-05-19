@@ -43,7 +43,7 @@ describe('Axe: artefactos críticos sin violaciones', () => {
           kpis: [
             {
               id: 'k1',
-              etiqueta: 'Biomasa',
+              etiqueta: 'Volumen',
               valor: '2.450 t',
               color: 'verde',
               delta: '+6%',

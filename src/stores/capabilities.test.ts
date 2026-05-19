@@ -113,7 +113,7 @@ describe('PR 0 · campos nuevos del schema v2.0', () => {
   it('parsea email_institucional, idioma y filtros_jwt en usuario', async () => {
     await useCapabilities.getState().load();
     const u = useCapabilities.getState().capabilities?.usuario;
-    expect(u?.email_institucional).toBe('matias.vergara@demo-salmonera.cl');
+    expect(u?.email_institucional).toBe('matias.vergara@industria-demo.cl');
     expect(u?.idioma).toBe('es');
     expect(u?.filtros_jwt?.length).toBeGreaterThan(0);
     expect(u?.bloqueados?.length).toBeGreaterThan(0);
@@ -123,20 +123,20 @@ describe('PR 0 · campos nuevos del schema v2.0', () => {
   it('parsea asistente_activo y ambitos_autorizados top-level', async () => {
     await useCapabilities.getState().load();
     const caps = useCapabilities.getState().capabilities;
-    expect(caps?.asistente_activo?.id).toBe('engorda');
+    expect(caps?.asistente_activo?.id).toBe('produccion');
     expect(caps?.asistente_activo?.version).toBe('v2.4.1');
     expect(caps?.ambitos_autorizados?.map((a) => a.id)).toEqual([
-      'mortalidad',
-      'calidad_agua',
-      'productividad',
+      'defectos',
+      'calidad_proceso',
+      'produccion',
     ]);
   });
 
   it('parsea tenant.dominio y tenant.region', async () => {
     await useCapabilities.getState().load();
     const t = useCapabilities.getState().capabilities?.tenant;
-    expect(t?.dominio).toBe('demo-salmonera.cl');
-    expect(t?.region).toBe('Región X · Los Lagos');
+    expect(t?.dominio).toBe('industria-demo.cl');
+    expect(t?.region).toBe('Región X · Centro');
   });
 
   it('parsea modulos.ml con enabled false (no licenciado)', async () => {

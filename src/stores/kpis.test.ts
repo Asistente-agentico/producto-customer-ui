@@ -13,14 +13,14 @@ beforeEach(() => {
 
 describe('useKpis store', () => {
   it('apply guarda el valor por kpi_id', () => {
-    useKpis.getState().apply({ kpi_id: 'biomasa_total', valor: '2.450 t' });
-    expect(useKpis.getState().values['biomasa_total']?.valor).toBe('2.450 t');
+    useKpis.getState().apply({ kpi_id: 'volumen_total', valor: '2.450 t' });
+    expect(useKpis.getState().values['volumen_total']?.valor).toBe('2.450 t');
   });
 
   it('apply actualiza valor existente', () => {
-    useKpis.getState().apply({ kpi_id: 'biomasa_total', valor: '2.400 t' });
-    useKpis.getState().apply({ kpi_id: 'biomasa_total', valor: '2.500 t' });
-    expect(useKpis.getState().values['biomasa_total']?.valor).toBe('2.500 t');
+    useKpis.getState().apply({ kpi_id: 'volumen_total', valor: '2.400 t' });
+    useKpis.getState().apply({ kpi_id: 'volumen_total', valor: '2.500 t' });
+    expect(useKpis.getState().values['volumen_total']?.valor).toBe('2.500 t');
   });
 
   it('flushAnnouncement throttlea a 1 cada 30s', () => {

@@ -32,7 +32,7 @@ export default function ChatInput({ onSend, disabled }: Props) {
 
   return (
     <form onSubmit={submit} className="border-t border-rule p-3 flex gap-2 items-end bg-paper">
-      {/* Sin scope chips · "asistente engorda · CTR-007" se eliminó del
+      {/* Sin scope chips · "asistente produccion · LIN-007" se eliminó del
           composer en el handoff v2.0 §3.10. Si en el futuro hace falta
           contexto explícito, se reintroduce vía artefacto `seleccion`. */}
       <label className="sr-only" htmlFor="chat-input">

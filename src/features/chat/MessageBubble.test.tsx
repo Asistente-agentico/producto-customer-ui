@@ -18,7 +18,7 @@ function wrap(node: React.ReactNode) {
 
 const userMessage: ChatMessage = {
   rol: 'user',
-  texto: 'Mortalidad última semana en CTR-001',
+  texto: 'Defectos última semana en LIN-001',
   ts: '2026-05-15T12:00:00Z',
 };
 
@@ -27,7 +27,7 @@ const assistantMessage: ChatMessage = {
   ts: '2026-05-15T12:00:05Z',
   respuesta: {
     mensaje_id: 'm1',
-    respuesta: 'En los últimos 7 días, CTR-001 registró un pico el día 5...',
+    respuesta: 'En los últimos 7 días, LIN-001 registró un pico el día 5...',
     blocked: false,
     error: null,
     artefactos: [

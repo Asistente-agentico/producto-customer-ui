@@ -8,15 +8,15 @@ import type { Artefacto } from '@/api/types';
 const TableroKpiCard = lazy(() => import('@/artifacts/TableroKpiCard'));
 
 const COLORES: Record<string, 'verde' | 'amarillo' | 'rojo' | 'azul' | 'gris'> = {
-  biomasa_total: 'verde',
-  mortalidad: 'amarillo',
-  fcr_promedio: 'verde',
+  volumen_total: 'verde',
+  defectos: 'amarillo',
+  ratio_insumo_salida_promedio: 'verde',
 };
 
 const ETIQUETAS: Record<string, string> = {
-  biomasa_total: 'Biomasa total',
-  mortalidad: 'Mortalidad',
-  fcr_promedio: 'FCR promedio',
+  volumen_total: 'Volumen total',
+  defectos: 'Defectos',
+  ratio_insumo_salida_promedio: 'Ratio insumo/salida promedio',
 };
 
 export default function DashboardPage() {

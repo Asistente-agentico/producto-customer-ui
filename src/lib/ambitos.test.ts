@@ -1,38 +1,38 @@
 import { describe, expect, it } from 'vitest';
 import { detectAmbito, tituloConversacion } from './ambitos';
 
-const AUTORIZADOS = ['mortalidad', 'calidad_agua', 'productividad'];
+const AUTORIZADOS = ['defectos', 'calidad_proceso', 'produccion'];
 
 describe('detectAmbito', () => {
-  it('detecta mortalidad por keywords (mortalidad, brote, virus)', () => {
-    expect(detectAmbito('Mortalidad última semana CTR-007', AUTORIZADOS)).toBe('mortalidad');
-    expect(detectAmbito('Hubo un brote en jaula 4', AUTORIZADOS)).toBe('mortalidad');
-    expect(detectAmbito('Sospecha de virus IPN', AUTORIZADOS)).toBe('mortalidad');
+  it('detecta defectos por keywords (defecto, falla, rechazo)', () => {
+    expect(detectAmbito('Defectos última semana LIN-007', AUTORIZADOS)).toBe('defectos');
+    expect(detectAmbito('Hubo una falla en máquina 4', AUTORIZADOS)).toBe('defectos');
+    expect(detectAmbito('Rechazos por desviación en QA', AUTORIZADOS)).toBe('defectos');
   });
 
-  it('detecta calidad_agua por keywords (O₂, temperatura, salinidad)', () => {
-    expect(detectAmbito('O2 disuelto bajo umbral', AUTORIZADOS)).toBe('calidad_agua');
-    expect(detectAmbito('Temperatura del agua subió', AUTORIZADOS)).toBe('calidad_agua');
-    expect(detectAmbito('Bloom de fitoplancton', AUTORIZADOS)).toBe('calidad_agua');
+  it('detecta calidad_proceso por keywords (temperatura, presión, parámetro)', () => {
+    expect(detectAmbito('Temperatura fuera de rango', AUTORIZADOS)).toBe('calidad_proceso');
+    expect(detectAmbito('Presión subió bajo umbral', AUTORIZADOS)).toBe('calidad_proceso');
+    expect(detectAmbito('Parámetro crítico desviado', AUTORIZADOS)).toBe('calidad_proceso');
   });
 
-  it('detecta productividad por keywords (FCR, biomasa, cosecha)', () => {
-    expect(detectAmbito('Revisión FCR semana 18', AUTORIZADOS)).toBe('productividad');
-    expect(detectAmbito('Biomasa proyectada Q3', AUTORIZADOS)).toBe('productividad');
-    expect(detectAmbito('Plan de cosecha', AUTORIZADOS)).toBe('productividad');
+  it('detecta produccion por keywords (volumen, ratio, throughput)', () => {
+    expect(detectAmbito('Revisión ratio semana 18', AUTORIZADOS)).toBe('produccion');
+    expect(detectAmbito('Volumen proyectado Q3', AUTORIZADOS)).toBe('produccion');
+    expect(detectAmbito('Plan de cierre de lote', AUTORIZADOS)).toBe('produccion');
   });
 
   it('texto sin matches → fallback al primer ámbito autorizado', () => {
-    expect(detectAmbito('Hola, ¿cómo estás?', AUTORIZADOS)).toBe('mortalidad');
+    expect(detectAmbito('Hola, ¿cómo estás?', AUTORIZADOS)).toBe('defectos');
   });
 
   it('sin ámbitos autorizados → null (no se inventa)', () => {
-    expect(detectAmbito('Mortalidad', [])).toBe(null);
+    expect(detectAmbito('Defectos', [])).toBe(null);
   });
 
   it('solo cae a un ámbito autorizado · respeta filtro RBAC', () => {
-    // Si "mortalidad" no está autorizado, no se devuelve aunque matchee.
-    expect(detectAmbito('Mortalidad', ['calidad_agua', 'productividad'])).toBe('calidad_agua');
+    // Si "defectos" no está autorizado, no se devuelve aunque matchee.
+    expect(detectAmbito('Defectos', ['calidad_proceso', 'produccion'])).toBe('calidad_proceso');
   });
 });
 

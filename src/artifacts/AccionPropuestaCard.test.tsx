@@ -36,7 +36,7 @@ const accionAgente = {
   tipo_accion: 'AGENTE_IA',
   id_propuesta: 'act_agt',
   titulo: 'Disparar aireadores',
-  parametros: { centro_id: 'CTR-007' },
+  parametros: { linea_id: 'LIN-007' },
   permite_edicion: [],
   permiso_requerido: 'disparar_agente_aireadores',
 } satisfies Artefacto;

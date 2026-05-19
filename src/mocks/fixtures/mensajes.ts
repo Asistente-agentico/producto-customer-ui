@@ -3,31 +3,31 @@
 
 import type { MensajeResponseRaw } from '@/api/types';
 
-export const mensajeMortalidadFixture: MensajeResponseRaw = {
+export const mensajeDefectosFixture: MensajeResponseRaw = {
   mensaje_id: 'msg_demo_001',
   respuesta:
-    'En los últimos 7 días, **CTR-001** registró una mortalidad acumulada de 84 peces, con un pico el día 5 asociado a un evento de temperatura elevada.',
+    'En los últimos 7 días, **LIN-001** registró un total acumulado de 84 defectos, con un pico el día 5 asociado a un evento de temperatura elevada.',
   blocked: false,
   error: null,
   metadata: {
     chunks_used: 7,
-    scopes: ['mortalidad_cultivo', 'centros_cultivo'],
+    scopes: ['control_defectos', 'lineas_produccion'],
     ambiguous_routing: false,
     permisos_aplicados: {
-      rol: 'jefe_centro',
-      filtros_jwt_aplicados: [{ campo: 'centro_id', valor: 'CTR-001' }],
+      rol: 'lider_linea',
+      filtros_jwt_aplicados: [{ campo: 'linea_id', valor: 'LIN-001' }],
     },
   },
   artefactos: [
     {
       tipo: 'serie_temporal',
       version: 1,
-      grafico_rule_id: 'MORT_DIA_C001',
-      titulo: 'Mortalidad diaria — Centro 001',
-      subtitulo: 'Últimos 7 días · CTR-001',
+      grafico_rule_id: 'DEF_DIA_L001',
+      titulo: 'Defectos diarios — Línea 001',
+      subtitulo: 'Últimos 7 días · LIN-001',
       ventana_actual: '7',
       ventanas_disponibles: ['7', '30', '90', 'ciclo'],
-      unidad_y: 'peces',
+      unidad_y: 'unidades',
       puntos: [
         { x: '2026-05-07', y: 8 },
         { x: '2026-05-08', y: 10 },
@@ -39,8 +39,8 @@ export const mensajeMortalidadFixture: MensajeResponseRaw = {
       ],
       rango_objetivo_y: { y_min: 0, y_max: 12, etiqueta: 'Zona objetivo' },
       metricas_resumen: {
-        promedio: { etiqueta: 'Promedio', valor: 12, unidad: 'peces/día' },
-        pico: { etiqueta: 'Pico', valor: 24, unidad: 'peces' },
+        promedio: { etiqueta: 'Promedio', valor: 12, unidad: 'unidades/día' },
+        pico: { etiqueta: 'Pico', valor: 24, unidad: 'unidades' },
       },
     },
     {
@@ -57,24 +57,24 @@ export const mensajeMortalidadFixture: MensajeResponseRaw = {
 
 export const mensajeTablaFixture: MensajeResponseRaw = {
   mensaje_id: 'msg_demo_002',
-  respuesta: 'Estos son los centros activos con biomasa y FCR del último mes:',
+  respuesta: 'Estas son las líneas activas con volumen y ratio insumo/salida del último mes:',
   blocked: false,
   error: null,
-  metadata: { chunks_used: 4, scopes: ['centros_cultivo'], ambiguous_routing: false },
+  metadata: { chunks_used: 4, scopes: ['lineas_produccion'], ambiguous_routing: false },
   artefactos: [
     {
       tipo: 'tabla',
       version: 1,
-      titulo: 'Centros activos',
+      titulo: 'Líneas activas',
       columnas: [
-        { id: 'centro_id', label: 'Centro', tipo: 'string' },
-        { id: 'biomasa', label: 'Biomasa (t)', tipo: 'number' },
-        { id: 'fcr', label: 'FCR', tipo: 'number' },
+        { id: 'linea_id', label: 'Línea', tipo: 'string' },
+        { id: 'volumen', label: 'Volumen (t)', tipo: 'number' },
+        { id: 'ratio', label: 'Ratio insumo/salida', tipo: 'number' },
       ],
       filas: [
-        { centro_id: 'CTR-001', biomasa: 850, fcr: 1.42 },
-        { centro_id: 'CTR-002', biomasa: 740, fcr: 1.51 },
-        { centro_id: 'CTR-003', biomasa: 920, fcr: 1.38 },
+        { linea_id: 'LIN-001', volumen: 850, ratio: 1.42 },
+        { linea_id: 'LIN-002', volumen: 740, ratio: 1.51 },
+        { linea_id: 'LIN-003', volumen: 920, ratio: 1.38 },
       ],
       sortable: true,
       filterable: true,
@@ -96,8 +96,8 @@ export const mensajeKpiFixture: MensajeResponseRaw = {
       subtitulo: 'Abril 2026',
       kpis: [
         {
-          id: 'biomasa_total',
-          etiqueta: 'Biomasa total',
+          id: 'volumen_total',
+          etiqueta: 'Volumen total',
           valor: '2.450 t',
           color: 'verde',
           target: '2.300 t',
@@ -105,16 +105,16 @@ export const mensajeKpiFixture: MensajeResponseRaw = {
           delta_tipo: 'positivo',
         },
         {
-          id: 'mortalidad',
-          etiqueta: 'Mortalidad',
+          id: 'defectos',
+          etiqueta: 'Defectos',
           valor: '0.84%',
           color: 'amarillo',
           delta: '+0.12 pp',
           delta_tipo: 'negativo',
         },
         {
-          id: 'fcr_promedio',
-          etiqueta: 'FCR promedio',
+          id: 'ratio_insumo_salida_promedio',
+          etiqueta: 'Ratio insumo/salida promedio',
           valor: 1.44,
           color: 'verde',
         },
@@ -138,7 +138,7 @@ export const mensajeAccionFixture: MensajeResponseRaw = {
     'Preparé un correo institucional con el resumen. Revisalo en el módulo de Acciones antes de enviarlo.',
   blocked: false,
   error: null,
-  metadata: { chunks_used: 5, scopes: ['mortalidad_cultivo'] },
+  metadata: { chunks_used: 5, scopes: ['control_defectos'] },
   artefactos: [
     {
       tipo: 'accion_propuesta',
@@ -146,12 +146,12 @@ export const mensajeAccionFixture: MensajeResponseRaw = {
       tipo_accion: 'ENVIAR_CORREO',
       id_propuesta: 'act_abc123',
       titulo: 'Notificar a Hugo Salinas',
-      sub: 'Jefe Centro CTR-007 · alza mortalidad + caída O₂',
+      sub: 'Líder Línea LIN-007 · alza defectos + caída parámetro crítico',
       parametros: {
         destinatario: 'hugo.salinas@empresa.cl',
-        asunto: 'CTR-007 jaula 4 · alza de mortalidad y caída O₂',
+        asunto: 'LIN-007 máquina 4 · alza de defectos y caída de parámetro crítico',
         cuerpo:
-          'Hugo,\n\nDetectamos un alza sostenida de mortalidad en CTR-007 jaula 4 (27 u/d, +38% vs semana anterior) que correlaciona con caída de O₂ disuelto bajo 6.5 mg/L durante 72h. ¿Podemos coordinar revisión mañana AM?',
+          'Hugo,\n\nDetectamos un alza sostenida de defectos en LIN-007 máquina 4 (27 u/d, +38% vs semana anterior) que correlaciona con caída del parámetro crítico bajo 6.5 mg/L durante 72h. ¿Podemos coordinar revisión mañana AM?',
       },
       permite_edicion: ['destinatario', 'asunto', 'cuerpo'],
     },
@@ -160,19 +160,19 @@ export const mensajeAccionFixture: MensajeResponseRaw = {
 
 export const mensajeSeleccionFixture: MensajeResponseRaw = {
   mensaje_id: 'msg_demo_005',
-  respuesta: 'Tengo varios centros con datos. ¿De cuál te gustaría ver la mortalidad?',
+  respuesta: 'Tengo varias líneas con datos. ¿De cuál te gustaría ver los defectos?',
   blocked: false,
   error: null,
-  metadata: { chunks_used: 2, scopes: ['centros_cultivo'], ambiguous_routing: true },
+  metadata: { chunks_used: 2, scopes: ['lineas_produccion'], ambiguous_routing: true },
   artefactos: [
     {
       tipo: 'seleccion',
       version: 1,
-      pregunta: '¿De qué centro?',
+      pregunta: '¿De qué línea?',
       opciones: [
-        { value: 'CTR-001', label: 'Centro 001 — Patagonia Norte' },
-        { value: 'CTR-002', label: 'Centro 002 — Patagonia Sur' },
-        { value: 'CTR-003', label: 'Centro 003 — Aysén' },
+        { value: 'LIN-001', label: 'Línea 001 — Planta Norte' },
+        { value: 'LIN-002', label: 'Línea 002 — Planta Sur' },
+        { value: 'LIN-003', label: 'Línea 003 — Planta Este' },
       ],
       multi: false,
     },
@@ -203,8 +203,8 @@ export const mensajeUnknownFixture: MensajeResponseRaw = {
 /** Selecciona un fixture según palabras clave en la consulta. */
 export function pickMensajeMock(text: string): MensajeResponseRaw {
   const t = text.toLowerCase();
-  if (t.includes('mortalidad')) return mensajeMortalidadFixture;
-  if (t.includes('centro') || t.includes('biomasa') || t.includes('tabla')) {
+  if (t.includes('defecto')) return mensajeDefectosFixture;
+  if (t.includes('linea') || t.includes('línea') || t.includes('volumen') || t.includes('tabla')) {
     return mensajeTablaFixture;
   }
   if (t.includes('kpi') || t.includes('resumen')) return mensajeKpiFixture;
@@ -217,7 +217,7 @@ export function pickMensajeMock(text: string): MensajeResponseRaw {
   return {
     mensaje_id: `msg_${Date.now()}`,
     respuesta:
-      'Mensaje genérico de prueba. Probá con palabras como **mortalidad**, **centros**, **KPI**, **correo** o **seleccionar** para ver distintos artefactos.',
+      'Mensaje genérico de prueba. Probá con palabras como **defectos**, **líneas**, **KPI**, **correo** o **seleccionar** para ver distintos artefactos.',
     blocked: false,
     error: null,
     metadata: { chunks_used: 0, scopes: [] },

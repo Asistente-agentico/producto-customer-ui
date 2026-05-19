@@ -3,7 +3,7 @@ import type { Accion, AgenteCatalogo, EstadoAccion } from '@/api/types';
 
 const ACCIONES_BASE = 'http://localhost:8083';
 
-const USER_EMAIL = 'matias.vergara@demo-salmonera.cl';
+const USER_EMAIL = 'matias.vergara@industria-demo.cl';
 const USER_NAME = 'Matías Vergara';
 
 function nowIso(): string {
@@ -21,21 +21,21 @@ const acciones = new Map<string, Accion>([
       id: 'act_abc123',
       tipo: 'ENVIAR_CORREO',
       titulo: 'Notificar a Hugo Salinas',
-      sub: 'Jefe Centro CTR-007 · alza mortalidad + caída O₂',
+      sub: 'Líder Línea LIN-007 · alza defectos + caída parámetro crítico',
       estado: 'pendiente',
       origen: 'Conversación · 14:32',
       parametros: {
         destinatario: 'hugo.salinas@empresa.cl',
-        asunto: 'CTR-007 jaula 4 · alza de mortalidad y caída O₂',
+        asunto: 'LIN-007 máquina 4 · alza de defectos y caída de parámetro crítico',
         cuerpo:
-          'Hugo,\n\nDetectamos un alza sostenida de mortalidad en CTR-007 jaula 4 (27 u/d, +38% vs semana anterior) que correlaciona con caída de O₂ disuelto bajo 6.5 mg/L durante 72h. ¿Podemos coordinar revisión mañana AM?',
+          'Hugo,\n\nDetectamos un alza sostenida de defectos en LIN-007 máquina 4 (27 u/d, +38% vs semana anterior) que correlaciona con caída del parámetro crítico bajo 6.5 mg/L durante 72h. ¿Podemos coordinar revisión mañana AM?',
       },
       audit: [
         {
           ts: nowIso(),
-          actor: 'asistente.engorda',
+          actor: 'asistente.produccion',
           accion: 'Acción propuesta',
-          detalle: 'Generada por LLM tras consulta sobre mortalidad',
+          detalle: 'Generada por LLM tras consulta sobre defectos',
         },
       ],
       creada_en: nowIso(),
@@ -47,11 +47,11 @@ const acciones = new Map<string, Accion>([
       id: 'act_6a01',
       tipo: 'AGENTE_IA',
       titulo: 'Disparar agente · calibración aireadores',
-      sub: 'Revisión remota CTR-007 · estimado 12 min',
+      sub: 'Revisión remota LIN-007 · estimado 12 min',
       estado: 'pendiente',
       origen: 'Manual',
       permiso_requerido: 'disparar_agente_aireadores',
-      parametros: { centro_id: 'CTR-007', motivo: 'O2 bajo umbral' },
+      parametros: { linea_id: 'LIN-007', motivo: 'Parámetro crítico bajo umbral' },
       audit: [
         {
           ts: nowIso(),
@@ -69,7 +69,7 @@ const acciones = new Map<string, Accion>([
       id: 'act_5e88',
       tipo: 'ENVIAR_CORREO',
       titulo: 'Resumen semanal a Gerencia',
-      sub: 'Mortalidad + FCR + biomasa · 4 centros',
+      sub: 'Defectos + Ratio insumo/salida + Volumen · 4 líneas',
       estado: 'ejecutada',
       origen: 'Conversación · 11:08',
       parametros: {
@@ -78,7 +78,7 @@ const acciones = new Map<string, Accion>([
         cuerpo: 'Resumen consolidado de las métricas...',
       },
       audit: [
-        { ts: nowIso(), actor: 'asistente.engorda', accion: 'Acción propuesta' },
+        { ts: nowIso(), actor: 'asistente.produccion', accion: 'Acción propuesta' },
         { ts: nowIso(), actor: USER_NAME, accion: 'Revisión' },
         { ts: nowIso(), actor: USER_NAME, accion: 'Ejecutada', detalle: 'Enviada vía SMTP' },
       ],
@@ -97,7 +97,7 @@ const acciones = new Map<string, Accion>([
       origen: 'Conversación · 14:18',
       parametros: {},
       audit: [
-        { ts: nowIso(), actor: 'asistente.engorda', accion: 'Acción propuesta' },
+        { ts: nowIso(), actor: 'asistente.produccion', accion: 'Acción propuesta' },
         { ts: nowIso(), actor: USER_NAME, accion: 'Descartada' },
       ],
       creada_en: nowIso(),

@@ -92,8 +92,8 @@ describe('PreviewPayloadSchema', () => {
     const parsed = PreviewPayloadSchema.parse({
       columns: ['centro', 'monto'],
       rows: [
-        ['CTR-001', 1234.5],
-        ['CTR-002', 987],
+        ['LIN-001', 1234.5],
+        ['LIN-002', 987],
       ],
       total_rows: 2,
       sample_size: 2,

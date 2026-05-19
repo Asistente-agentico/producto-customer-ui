@@ -11,9 +11,9 @@ const KPI_BASE = 'http://localhost:8082';
 
 const kpisIniciales: Array<{ kpi_id: string; rangoMin: number; rangoMax: number; unidad: string }> =
   [
-    { kpi_id: 'biomasa_total', rangoMin: 2400, rangoMax: 2500, unidad: 't' },
-    { kpi_id: 'mortalidad', rangoMin: 0.7, rangoMax: 1.1, unidad: '%' },
-    { kpi_id: 'fcr_promedio', rangoMin: 1.35, rangoMax: 1.55, unidad: '' },
+    { kpi_id: 'volumen_total', rangoMin: 2400, rangoMax: 2500, unidad: 't' },
+    { kpi_id: 'defectos', rangoMin: 0.7, rangoMax: 1.1, unidad: '%' },
+    { kpi_id: 'ratio_insumo_salida_promedio', rangoMin: 1.35, rangoMax: 1.55, unidad: '' },
   ];
 
 function randomInRange(min: number, max: number): number {

@@ -18,7 +18,7 @@ import type { ModuloConfig } from '@/api/types';
 
 type Pendiente = {
   id: string;
-  tipo: 'borrador' | 'umbral' | 'mortalidad' | 'otro';
+  tipo: 'borrador' | 'umbral' | 'defectos' | 'otro';
   sev: 'info' | 'warn' | 'error';
   titulo: string;
   sub?: string;
@@ -41,16 +41,16 @@ const MOCK_PENDIENTES: Pendiente[] = [
     id: 'p2',
     tipo: 'umbral',
     sev: 'warn',
-    titulo: 'O₂ disuelto bajo umbral · CTR-003',
+    titulo: 'Parámetro crítico bajo umbral · LIN-003',
     sub: '6.0 mg/L · objetivo ≥ 6.5',
     ts: 'hace 14 min',
     modulo: 'kpis',
   },
   {
     id: 'p3',
-    tipo: 'mortalidad',
+    tipo: 'defectos',
     sev: 'warn',
-    titulo: 'Mortalidad CTR-007 sobre umbral',
+    titulo: 'Defectos LIN-007 sobre umbral',
     sub: '27 u/d · zona objetivo 8–14',
     ts: 'hace 32 min',
     modulo: 'central',

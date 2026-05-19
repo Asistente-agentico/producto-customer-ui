@@ -11,9 +11,9 @@
 // con responses legacy que no traigan `ambito_id`.
 
 const DEFAULT_VOCAB: Record<string, RegExp> = {
-  mortalidad: /(mortalidad|peces muertos|brote|patolog|virus|bacteri|enferm)/i,
-  calidad_agua: /(o2|ox[ií]geno|temperatura|salinidad|agua|fitoplancton|bloom|secchi|corriente)/i,
-  productividad: /(fcr|biomasa|peso|cosecha|crecimiento|alimentaci[oó]n|engorda|productividad)/i,
+  defectos: /(defecto|defectos|falla|fallas|rechazo|rechazos|merma|mermas|reclamo|reclamos|desviacion|incidente)/i,
+  calidad_proceso: /(temperatura|presi[oó]n|humedad|par[aá]metro|calidad|tolerancia|fuera de rango|umbral)/i,
+  produccion: /(volumen|ratio|peso|cierre.de.lote|insumo|producci[oó]n|productividad|throughput|rendimiento)/i,
 };
 
 export type AmbitoSlug = string;

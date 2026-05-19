@@ -5,7 +5,7 @@ type Props = {
 };
 
 /**
- * Barra de progreso lineal contra un target. Útil para "peso medio"
+ * Barra de progreso lineal contra un target. Útil para "peso promedio"
  * y similares donde el valor se mide vs un objetivo único.
  */
 export default function MiniProgress({ valor, target, height = 36 }: Props) {

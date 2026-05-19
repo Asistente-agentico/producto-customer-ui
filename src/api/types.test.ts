@@ -12,7 +12,7 @@ describe('parseArtefacto', () => {
     const result = parseArtefacto({
       tipo: 'serie_temporal',
       version: 1,
-      titulo: 'Mortalidad',
+      titulo: 'Defectos',
       puntos: [{ x: '2026-04-13', y: 12 }],
     });
     expect(result.tipo).toBe('serie_temporal');
@@ -23,7 +23,7 @@ describe('parseArtefacto', () => {
       tipo: 'banner',
       version: 1,
       variante: 'causal',
-      mensaje: 'Aumento de mortalidad asociado a evento X.',
+      mensaje: 'Aumento de defectos asociado a evento X.',
     });
     expect(result.tipo).toBe('banner');
   });

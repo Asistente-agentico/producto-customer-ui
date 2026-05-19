@@ -21,7 +21,7 @@ type Props = {
  *   [hamburger] [📅 fecha] [Última] [Pendientes ▾] [KPI]
  *      ╴╴╴╴ flex-1 ╴╴╴╴╴╴
  *      [Chat · ML · Reportes · Acciones · on-line]
- *      | [🌐 idioma] [🔔 N] [🐟 Asistente ▾] [⏏]
+ *      | [🌐 idioma] [🔔 N] [📊 Asistente ▾] [⏏]
  *
  * Reglas (§3.1 + Q3):
  * - La pantalla arranca limpia. Todos los toggles en OFF al cargar.

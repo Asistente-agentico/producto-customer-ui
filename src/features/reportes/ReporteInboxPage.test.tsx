@@ -17,20 +17,20 @@ const REPORTES_BASE = 'http://localhost:8081';
 const ITEMS_DEFAULT = [
   {
     id: 'r_borr',
-    nombre: 'Mortalidad mensual',
+    nombre: 'Defectos mensuales',
     descripcion: 'Sin enviar',
     state: 'borrador',
     creator_id: 'u_me',
   },
   {
     id: 'r_data',
-    nombre: 'Biomasa diaria',
+    nombre: 'Volumen diario',
     state: 'esperando_datos',
     creator_id: 'u_me',
   },
   {
     id: 'r_val',
-    nombre: 'FCR consolidado',
+    nombre: 'Ratio insumo/salida consolidado',
     state: 'esperando_validacion',
     next_action_for: 'u_me',
     urgent: true,
@@ -179,10 +179,10 @@ describe('ReporteInboxPage · US-02 (m3 pr-5)', () => {
     await setupCapsReady();
     wrap();
 
-    expect(await screen.findByText('Mortalidad mensual')).toBeInTheDocument();
-    expect(screen.getByText('Biomasa diaria')).toBeInTheDocument();
+    expect(await screen.findByText('Defectos mensuales')).toBeInTheDocument();
+    expect(screen.getByText('Volumen diario')).toBeInTheDocument();
     // Items de otras tabs NO se muestran.
-    expect(screen.queryByText('FCR consolidado')).not.toBeInTheDocument();
+    expect(screen.queryByText('Ratio insumo/salida consolidado')).not.toBeInTheDocument();
   });
 
   it('click en otra tab filtra la lista por estado', async () => {
@@ -190,11 +190,11 @@ describe('ReporteInboxPage · US-02 (m3 pr-5)', () => {
     await setupCapsReady();
     wrap();
 
-    await screen.findByText('Mortalidad mensual');
+    await screen.findByText('Defectos mensuales');
     fireEvent.click(screen.getByRole('tab', { name: /en validación/i }));
 
-    expect(await screen.findByText('FCR consolidado')).toBeInTheDocument();
-    expect(screen.queryByText('Mortalidad mensual')).not.toBeInTheDocument();
+    expect(await screen.findByText('Ratio insumo/salida consolidado')).toBeInTheDocument();
+    expect(screen.queryByText('Defectos mensuales')).not.toBeInTheDocument();
   });
 
   it('muestra indicador "Te toca" para items donde next_action_for === id_pseudo', async () => {
@@ -231,7 +231,7 @@ describe('ReporteInboxPage · US-02 (m3 pr-5)', () => {
     await setupCapsReady();
     wrap();
 
-    const link = await screen.findByRole('link', { name: /mortalidad mensual/i });
+    const link = await screen.findByRole('link', { name: /defectos mensuales/i });
     expect(link).toHaveAttribute('href', '/reportes/r_borr');
     fireEvent.click(link);
 
@@ -250,7 +250,7 @@ describe('ReporteInboxPage · US-02 (m3 pr-5)', () => {
     }
     wrap();
 
-    await screen.findByText('Mortalidad mensual');
+    await screen.findByText('Defectos mensuales');
     expect(screen.queryByRole('link', { name: /crear reporte/i })).not.toBeInTheDocument();
   });
 
@@ -260,7 +260,7 @@ describe('ReporteInboxPage · US-02 (m3 pr-5)', () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     wrap();
 
-    await screen.findByText('Mortalidad mensual');
+    await screen.findByText('Defectos mensuales');
     const initialCalls = handlers.inboxCalls;
     expect(initialCalls).toBeGreaterThanOrEqual(1);
 
@@ -274,7 +274,7 @@ describe('ReporteInboxPage · US-02 (m3 pr-5)', () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     wrap();
 
-    await screen.findByText('Mortalidad mensual');
+    await screen.findByText('Defectos mensuales');
     const initialCalls = handlers.inboxCalls;
     // A 4s todavía no debe haber refetch (sumando margen).
     await vi.advanceTimersByTimeAsync(4_000);
