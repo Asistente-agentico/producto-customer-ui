@@ -132,6 +132,19 @@ export const ModuloConfigSchema = z
   })
   .passthrough();
 
+// PR 5 cleanup · sub-config específica del módulo Reportes con el
+// intervalo de polling de la bandeja. `refresh_interval_seconds` cae
+// a 30 si el central no lo emite. Si `inbox` está ausente, la UI
+// también usa 30 (default operacional).
+export const ModuloReportesConfigSchema = ModuloConfigSchema.extend({
+  inbox: z
+    .object({
+      refresh_interval_seconds: z.number().default(30),
+    })
+    .optional(),
+});
+export type ModuloReportesConfig = z.infer<typeof ModuloReportesConfigSchema>;
+
 // PR 0: snapshot inicial de KPI configurado por usuario (banda inline
 // del prototipo Omelette). Diferenciado del SSE del dashboard:
 // estos son los KPIs *configurados* del usuario; el stream actualiza
@@ -242,7 +255,7 @@ export const CapabilitiesSchema = z
     modulos: z
       .object({
         central: ModuloConfigSchema,
-        reportes: ModuloConfigSchema.optional(),
+        reportes: ModuloReportesConfigSchema.optional(),
         kpis: ModuloConfigSchema.optional(),
         acciones: ModuloConfigSchema.optional(),
         // PR 0: módulo ML del v2.0.

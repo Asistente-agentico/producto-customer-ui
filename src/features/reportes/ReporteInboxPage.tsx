@@ -14,7 +14,7 @@ import { useCapabilities } from '@/stores/capabilities';
  *   corresponde al usuario activo.
  * - Polling de 30s configurable vía
  *   `capabilities.modulos.reportes.inbox.refresh_interval_seconds`
- *   (lectura defensiva con cast — el schema admite passthrough).
+ *   (tipado en `ModuloReportesConfigSchema`, PR 5 cleanup).
  * - Bridge "+ Crear reporte" idéntico al del catálogo, condicional
  *   por el permiso `crear_reporte`.
  */
@@ -42,14 +42,6 @@ const ORDER: TabId[] = ['borradores', 'validacion', 'aprobacion', 'iterando'];
 
 const DEFAULT_REFRESH_SECONDS = 30;
 
-function readRefreshIntervalMs(caps: ReturnType<typeof useCapabilities.getState>['capabilities']): number {
-  const reportes = caps?.modulos.reportes as
-    | { inbox?: { refresh_interval_seconds?: number } }
-    | undefined;
-  const seconds = reportes?.inbox?.refresh_interval_seconds ?? DEFAULT_REFRESH_SECONDS;
-  return seconds * 1000;
-}
-
 function tabFromState(state: string | undefined): TabId | null {
   if (!state) return null;
   for (const tab of ORDER) {
@@ -65,7 +57,9 @@ export default function ReporteInboxPage() {
   const userId = caps?.usuario.id_pseudo;
   const userPerms = useMemo(() => caps?.usuario.permisos ?? [], [caps]);
   const puedeCrear = userPerms.includes('crear_reporte');
-  const refetchInterval = readRefreshIntervalMs(caps);
+  const refetchInterval =
+    (caps?.modulos.reportes?.inbox?.refresh_interval_seconds ?? DEFAULT_REFRESH_SECONDS) *
+    1000;
 
   const [activeTab, setActiveTab] = useState<TabId>('borradores');
 

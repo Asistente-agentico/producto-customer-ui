@@ -133,7 +133,14 @@ export const capabilitiesFixture: Capabilities = {
   },
   modulos: {
     central: { enabled: true, base_url: 'http://localhost:8080' },
-    reportes: { enabled: true, base_url: 'http://localhost:8081', features: ['pdf', 'excel'] },
+    reportes: {
+      enabled: true,
+      base_url: 'http://localhost:8081',
+      features: ['pdf', 'excel'],
+      // m3-pr-5-cleanup · contrato explícito del polling de la bandeja
+      // (tipado en ModuloReportesConfigSchema).
+      inbox: { refresh_interval_seconds: 30 },
+    },
     kpis: { enabled: true, base_url: 'http://localhost:8082', features: ['streaming_sse'] },
     acciones: { enabled: true, base_url: 'http://localhost:8083' },
     ml: { enabled: false, razon: 'no_licenciado' },
